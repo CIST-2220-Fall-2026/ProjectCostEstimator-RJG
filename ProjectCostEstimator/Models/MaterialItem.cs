@@ -6,6 +6,20 @@ namespace ProjectCostEstimator.Models
 {
     public class MaterialItem
     {
+        public MaterialItem() : this(string.Empty, string.Empty, string.Empty, 0m, 0m)
+        {
+        }
+
+        public MaterialItem(string title, string sourceUrl, string units, decimal costPerUnit, decimal unitsNeeded)
+        {
+            Title = title;
+            SourceUrl = sourceUrl;
+            Units = units;
+            this.costPerUnit = costPerUnit;
+            this.unitsNeeded = unitsNeeded;
+            CalculateTotalCost();
+        }
+
         public string Title { get; set; } = string.Empty;
         public string SourceUrl { get; set; } = string.Empty;
         public string Units { get; set; } = string.Empty;

@@ -19,13 +19,7 @@ public partial class ItemCalculatorPage : ContentPage
 		decimal unitsNeeded = decimal.Parse(UnitsNeededEntry.Text);
 
         // Instantiate an object and set its properties
-        MaterialItem item = new MaterialItem();
-
-		item.Title = title;
-        item.SourceUrl = sourceUrl;
-        item.Units = units;
-        item.CostPerUnit = costPerUnit;
-        item.UnitsNeeded = unitsNeeded;
+        MaterialItem item = new(title, sourceUrl, units, costPerUnit, unitsNeeded);
 
         // Display the appropriate thing from the ojbect
         TotalCostLabel.Text = item.ToString();
