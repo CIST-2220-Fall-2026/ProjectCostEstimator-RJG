@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ProjectCostEstimator.Views.ItemCalculatorPage"
+             Title="ItemCalculatorPage">
+    <VerticalStackLayout>
+        <Label 
+            Text="Item Entry Page"
+            VerticalOptions="Center" 
+            HorizontalOptions="Center" />
+        <Label Text="Title" />
+        <Entry x:Name="TitleEntry" Placeholder="Enter item title" />
+        <Label Text="Source URL" />
+        <Entry x:Name="SourceUrlEntry" Placeholder="Enter source URL" />
+        <Label Text="Units" />
+        <Entry x:Name="UnitsEntry" Placeholder="Enter units" />
+        <Label Text="Cost Per Unit" />
+        <Entry x:Name="CostPerUnitEntry" Placeholder="Enter cost per unit" />
+        <Label Text="Units Needed" />
+        <Entry x:Name="UnitsNeededEntry" Placeholder="Enter units needed" />
+        <Button x:Name="CalculateButton" Text="Calculate Item Cost" Clicked="CalculateButton_Clicked"/>   
+        <Label x:Name="TotalCostLabel" Text="Please enter item details and click Calculate." />
+    </VerticalStackLayout>
+</ContentPage>
