@@ -13,8 +13,18 @@
         Route="MainPage" />
 
     <ShellContent
-        Title="Item Calculator"
-        ContentTemplate="{DataTemplate views:ItemCalculatorPage}"
-        Route="ItemCalculatorPage" />
+        Title="Item Edit Page"
+        ContentTemplate="{DataTemplate views:EditItemPage}"
+        Route="EditItemPage" />
+
+    <ShellContent
+        Title="Bill Of Materials"
+        ContentTemplate="{DataTemplate views:BillOfMaterialsPage}"
+        Route="BillOfMaterialsPage" />
+
+    <ShellContent
+        Title="Help"
+        ContentTemplate="{DataTemplate views:HelpPage}"
+        Route="HelpPage" />
 
 </Shell>
