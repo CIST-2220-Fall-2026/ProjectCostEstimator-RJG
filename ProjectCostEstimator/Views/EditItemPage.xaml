@@ -18,7 +18,10 @@
         <Entry x:Name="CostPerUnitEntry" Placeholder="Enter cost per unit" />
         <Label Text="Units Needed" />
         <Entry x:Name="UnitsNeededEntry" Placeholder="Enter units needed" />
-        <Button x:Name="SubmitButton" Text="Submit" Clicked="SubmitButton_Clicked"/>   
+        <HorizontalStackLayout>
+            <Button x:Name="SubmitButton" Text="Submit" Clicked="SubmitButton_Clicked"/>
+            <Button x:Name="CancelButton" Text="Cancel" Clicked="CancelButton_Clicked"/>
+        </HorizontalStackLayout>
         <Label x:Name="TotalCostLabel" Text="Please enter item details and click Calculate." />
     </VerticalStackLayout>
 </ContentPage>

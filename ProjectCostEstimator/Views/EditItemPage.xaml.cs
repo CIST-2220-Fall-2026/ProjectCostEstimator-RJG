@@ -35,4 +35,10 @@ public partial class EditItemPage : ContentPage
         // Go back previous view
         Navigation.PopAsync();
     }
+
+    private void CancelButton_Clicked(object sender, EventArgs e)
+    {
+        // Go back previous view
+        Navigation.PopAsync();
+    }
 }

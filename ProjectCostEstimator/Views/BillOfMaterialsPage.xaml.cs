@@ -18,14 +18,21 @@ public partial class BillOfMaterialsPage : ContentPage
 
     private async void AddNewItemButton_Clicked(object sender, EventArgs e)
     {
-        MaterialItem? item = null;
-        await Navigation.PushAsync(new EditItemPage(item));
-        if (item != null) 
+        var page = new EditItemPage();
+
+        // Subscribe to the Disappearing event of the EditItemPage
+        // When the EditItemPage disappears, check if the item has a title and add it to the Items collection
+        page.Disappearing += (s, args) =>
         {
-            Items.Add(item);
-            // Refresh the listview
-            BOMCollectionView.ItemsSource = null;
-            BOMCollectionView.ItemsSource = Items;
-        }
+            if (page.Item != null)
+            {
+                Items.Add(page.Item);
+                // Refresh the ListView
+                BOMCollectionView.ItemsSource = null;
+                BOMCollectionView.ItemsSource = Items;
+            }
+        };
+
+        await Navigation.PushAsync(page);
     }
 }
