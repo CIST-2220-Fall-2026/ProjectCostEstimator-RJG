@@ -9,19 +9,20 @@
             VerticalOptions="Center" 
             HorizontalOptions="Center" />
         <Label Text="Title" />
-        <Entry x:Name="TitleEntry" Placeholder="Enter item title" />
+        <Entry Text="{Binding Title, Mode=TwoWay}" Placeholder="Enter item title" />
         <Label Text="Source URL" />
-        <Entry x:Name="SourceUrlEntry" Placeholder="Enter source URL" />
+        <Entry Text="{Binding SourceUrl, Mode=TwoWay}" Placeholder="Enter source URL" />
         <Label Text="Units" />
-        <Entry x:Name="UnitsEntry" Placeholder="Enter units" />
+        <Entry Text="{Binding Units, Mode=TwoWay}" Placeholder="Enter units" />
         <Label Text="Cost Per Unit" />
-        <Entry x:Name="CostPerUnitEntry" Placeholder="Enter cost per unit" />
+        <Entry Text="{Binding CostPerUnit, Mode=TwoWay}" Placeholder="Enter cost per unit" />
         <Label Text="Units Needed" />
-        <Entry x:Name="UnitsNeededEntry" Placeholder="Enter units needed" />
+        <Entry Text="{Binding UnitsNeeded, Mode=TwoWay}" Placeholder="Enter units needed" />
         <HorizontalStackLayout>
             <Button x:Name="SubmitButton" Text="Submit" Clicked="SubmitButton_Clicked"/>
             <Button x:Name="CancelButton" Text="Cancel" Clicked="CancelButton_Clicked"/>
         </HorizontalStackLayout>
-        <Label x:Name="TotalCostLabel" Text="Please enter item details and click Calculate." />
+        <Label Text="{Binding TotalText}" />
+        <Label Text="{Binding ErrorText}" />
     </VerticalStackLayout>
 </ContentPage>
