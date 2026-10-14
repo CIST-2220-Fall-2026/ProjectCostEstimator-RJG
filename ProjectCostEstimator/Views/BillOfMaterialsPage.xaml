@@ -1,35 +1,52 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"             x:Class="ProjectCostEstimator.Views.BillOfMaterialsPage"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:models="clr-namespace:ProjectCostEstimator.Models"
+             x:Class="ProjectCostEstimator.Views.BillOfMaterialsPage"
              Title="BillOfMaterialsPage">
-    <VerticalStackLayout>
-        <Label 
-            Text="Bill of Materials"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-        <CollectionView x:Name ="BOMCollectionView" ItemsSource="{Binding Items}">
+    <Grid RowDefinitions="Auto,*,Auto">
+        <Label Grid.Row="0"
+               Text="Bill of Materials"
+               HorizontalOptions="Center" />
+
+        <CollectionView Grid.Row="1"
+                        x:Name="BOMCollectionView"
+                        ItemsSource="{Binding Items}">
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="models:MaterialItem">
-                    <HorizontalStackLayout Padding="5">
-                        <Label 
-                            Padding="5"
-                            Text="{Binding Title}" />
-                        <Label 
-                            Padding="5"
-                            Text="Cost:" />
-                        <Label 
-                            Padding="5"
-                            Text="{Binding TotalCost}" />
-                        
-                        <Button x:Name="EditButton" Text="Edit" Clicked="EditButton_Clicked"/>
-                        <Button x:Name="DeleteButton" Text="Delete" Clicked="DeleteButton_Clicked" BackgroundColor="Red"/>
-                    </HorizontalStackLayout>
-                    
+                    <Grid Padding="6,2"
+                          ColumnDefinitions="*,Auto"
+                          RowDefinitions="Auto,Auto"
+                          ColumnSpacing="8">
+                        <Label Grid.Row="0"
+                               Grid.Column="0"
+                               LineBreakMode="TailTruncation"
+                               Text="{Binding Title}" />
+                        <Label Grid.Row="1"
+                               Grid.Column="0"
+                               Text="{Binding TotalCost, StringFormat='Cost: {0:C}'}" />
+                        <HorizontalStackLayout Grid.Row="0"
+                                               Grid.RowSpan="2"
+                                               Grid.Column="1"
+                                               VerticalOptions="Center"
+                                               Spacing="6">
+                            <Button x:Name="EditButton"
+                                    Text="Edit"
+                                    Clicked="EditButton_Clicked" />
+                            <Button x:Name="DeleteButton"
+                                    Text="Delete"
+                                    Clicked="DeleteButton_Clicked"
+                                    BackgroundColor="Red"
+                                    TextColor="White" />
+                        </HorizontalStackLayout>
+                    </Grid>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
 
-        <Button x:Name="AddNewItemButton" Clicked="AddNewItemButton_Clicked" Text="Add new item"/>
-    </VerticalStackLayout>
+        <Button Grid.Row="2"
+                x:Name="AddNewItemButton"
+                Text="Add new item"
+                Clicked="AddNewItemButton_Clicked" />
+    </Grid>
 </ContentPage>

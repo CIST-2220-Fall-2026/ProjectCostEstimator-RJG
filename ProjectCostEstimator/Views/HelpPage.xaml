@@ -2,11 +2,40 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="ProjectCostEstimator.Views.HelpPage"
-             Title="HelpPage">
-    <VerticalStackLayout>
-        <Label 
-            Text="Help Page"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+             Title="Help">
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="12">
+            <Label Text="About this app"
+                   FontSize="24"
+                   FontAttributes="Bold"
+                   SemanticProperties.HeadingLevel="Level1" />
+            <Label Text="The IoT Project Cost Estimator helps you build a bill of materials for a project. Each item has a cost per unit and a quantity needed. The app multiplies those values to calculate the item's total cost." />
+
+            <Label Text="View your items"
+                   FontSize="18"
+                   FontAttributes="Bold"
+                   SemanticProperties.HeadingLevel="Level2" />
+            <Label Text="Open Bill Of Materials from the navigation menu to see your items and their calculated costs." />
+
+            <Label Text="Add an item"
+                   FontSize="18"
+                   FontAttributes="Bold"
+                   SemanticProperties.HeadingLevel="Level2" />
+            <Label Text="Tap Add new item. Enter a title, units (for example, each or feet), cost per unit, and units needed. A source URL is optional. Tap Submit to add the item, or Cancel to return without adding it." />
+
+            <Label Text="Edit or delete an item"
+                   FontSize="18"
+                   FontAttributes="Bold"
+                   SemanticProperties.HeadingLevel="Level2" />
+            <Label Text="Tap Edit beside an item to change its details, then tap Submit to update it. Tap Cancel to leave it unchanged. Tap Delete to remove an item; the app asks you to confirm before deleting it." />
+
+            <Label Text="If an entry is rejected"
+                   FontSize="18"
+                   FontAttributes="Bold"
+                   SemanticProperties.HeadingLevel="Level2" />
+            <Label Text="A title and units are required. Cost per unit and units needed must be valid, nonnegative numbers. An alert explains what needs to be corrected." />
+
+            <Label Text="This version does not save changes between app launches." />
+        </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>

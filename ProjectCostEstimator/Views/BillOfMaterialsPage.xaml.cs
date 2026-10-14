@@ -20,14 +20,13 @@ public partial class BillOfMaterialsPage : ContentPage
     {
         var page = new ItemEditorPage();
 
-        // Subscribe to the Disappearing event of the EditItemPage
-        // When the EditItemPage disappears, check if the item has a title and add it to the Items collection
+        // Add the item when the editor closes after a successful Submit.
         page.Disappearing += (s, args) =>
         {
             if (page.Item != null)
             {
                 Items.Add(page.Item);
-                // Refresh the ListView
+                // Refresh the CollectionView because Items is a List.
                 BOMCollectionView.ItemsSource = null;
                 BOMCollectionView.ItemsSource = Items;
             }
@@ -36,7 +35,7 @@ public partial class BillOfMaterialsPage : ContentPage
         await Navigation.PushAsync(page);
     }
 
-    private async void EditButton_Clicked(object sender, EventArgs e)
+    private async void EditButton_Clicked(object? sender, EventArgs e)
     {
         if (sender is not Button button ||
         button.BindingContext is not MaterialItem originalItem)
@@ -71,7 +70,7 @@ public partial class BillOfMaterialsPage : ContentPage
         await Navigation.PushAsync(page);
     }
 
-    private async void DeleteButton_Clicked(object sender, EventArgs e)
+    private async void DeleteButton_Clicked(object? sender, EventArgs e)
     {
         if (sender is not Button button ||
             button.BindingContext is not MaterialItem item)
