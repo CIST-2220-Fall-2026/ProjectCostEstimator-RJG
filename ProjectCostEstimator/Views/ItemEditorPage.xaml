@@ -24,10 +24,11 @@
             <Entry Text="{Binding UnitsNeededText, Mode=TwoWay}"
                    Placeholder="Enter units needed" Keyboard="Numeric" />
             <HorizontalStackLayout>
-                <Button x:Name="SubmitButton" Text="Submit" Clicked="SubmitButton_Clicked"/>
-                <Button x:Name="CancelButton" Text="Cancel" Clicked="CancelButton_Clicked"/>                
+                <Button Text="Submit" Command="{Binding SubmitCommand}" />
+                <Button Text="Cancel" Command="{Binding CancelCommand}" />
             </HorizontalStackLayout>
             <Label Text="{Binding TotalText}" />
+            <Label Text="{Binding ValidationText}" />
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>
