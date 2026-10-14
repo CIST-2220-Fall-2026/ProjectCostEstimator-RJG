@@ -9,7 +9,7 @@ public partial class ItemEditorPage : ContentPage
 		InitializeComponent();
 	}
 
-    private void SubmitButton_Clicked(object sender, EventArgs e)
+    private void SubmitButton_Clicked(object? sender, EventArgs e)
     {
         // Get the values from the input fields
         string title = TitleEntry.Text ?? string.Empty;

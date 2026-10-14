@@ -3,22 +3,24 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="ProjectCostEstimator.Views.ItemEditorPage"
              Title="Item Editor">
-    <VerticalStackLayout>
-        <Label 
+    <ScrollView>
+        <VerticalStackLayout Padding="10">
+            <Label 
             Text="Item Editor Page"
             VerticalOptions="Center" 
             HorizontalOptions="Center" />
-        <Label Text="Title" />
-        <Entry x:Name="TitleEntry" Placeholder="Enter item title" />
-        <Label Text="Source URL" />
-        <Entry x:Name="SourceUrlEntry" Placeholder="Enter source URL" />
-        <Label Text="Units" />
-        <Entry x:Name="UnitsEntry" Placeholder="Enter units" />
-        <Label Text="Cost Per Unit" />
-        <Entry x:Name="CostPerUnitEntry" Placeholder="Enter cost per unit" />
-        <Label Text="Units Needed" />
-        <Entry x:Name="UnitsNeededEntry" Placeholder="Enter units needed" />
-        <Button x:Name="SubmitButton" Text="Submit" Clicked="SubmitButton_Clicked"/>   
-        <Label x:Name="TotalCostLabel" Text="Please enter item details and click Calculate." />
-    </VerticalStackLayout>
+            <Label Text="Title" />
+            <Entry x:Name="TitleEntry" Placeholder="Enter item title" />
+            <Label Text="Source URL" />
+            <Entry x:Name="SourceUrlEntry" Placeholder="Enter source URL" />
+            <Label Text="Units" />
+            <Entry x:Name="UnitsEntry" Placeholder="Enter units" />
+            <Label Text="Cost Per Unit" />
+            <Entry x:Name="CostPerUnitEntry" Placeholder="Enter cost per unit" />
+            <Label Text="Units Needed" />
+            <Entry x:Name="UnitsNeededEntry" Placeholder="Enter units needed" />
+            <Button x:Name="SubmitButton" Text="Submit" Clicked="SubmitButton_Clicked"/>
+            <Label x:Name="TotalCostLabel" Text="Please enter item details and click Calculate." />
+        </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>
