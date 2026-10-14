@@ -2,14 +2,14 @@ using ProjectCostEstimator.Models;
 
 namespace ProjectCostEstimator.Views;
 
-public partial class ItemCalculatorPage : ContentPage
+public partial class ItemEditorPage : ContentPage
 {
-	public ItemCalculatorPage()
+	public ItemEditorPage()
 	{
 		InitializeComponent();
 	}
 
-    private void CalculateButton_Clicked(object sender, EventArgs e)
+    private void SubmitButton_Clicked(object sender, EventArgs e)
     {
         // Get the values from the input fields
         string title = TitleEntry.Text ?? string.Empty;

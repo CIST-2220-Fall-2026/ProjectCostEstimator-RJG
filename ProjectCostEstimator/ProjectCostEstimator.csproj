@@ -71,7 +71,13 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <MauiXaml Update="Views\ItemCalculatorPage.xaml">
+	  <Compile Update="Views\ItemEditorPage.xaml.cs">
+	    <DependentUpon>ItemEditorPage.xaml</DependentUpon>
+	  </Compile>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <MauiXaml Update="Views\ItemEditorPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	</ItemGroup>

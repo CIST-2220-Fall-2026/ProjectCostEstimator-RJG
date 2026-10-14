@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="ProjectCostEstimator.Views.ItemCalculatorPage"
-             Title="ItemCalculatorPage">
+             x:Class="ProjectCostEstimator.Views.ItemEditorPage"
+             Title="Item Editor">
     <VerticalStackLayout>
         <Label 
-            Text="Item Entry Page"
+            Text="Item Editor Page"
             VerticalOptions="Center" 
             HorizontalOptions="Center" />
         <Label Text="Title" />
@@ -18,7 +18,7 @@
         <Entry x:Name="CostPerUnitEntry" Placeholder="Enter cost per unit" />
         <Label Text="Units Needed" />
         <Entry x:Name="UnitsNeededEntry" Placeholder="Enter units needed" />
-        <Button x:Name="CalculateButton" Text="Calculate Item Cost" Clicked="CalculateButton_Clicked"/>   
+        <Button x:Name="SubmitButton" Text="Submit" Clicked="SubmitButton_Clicked"/>   
         <Label x:Name="TotalCostLabel" Text="Please enter item details and click Calculate." />
     </VerticalStackLayout>
 </ContentPage>
