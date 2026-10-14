@@ -1,43 +1,38 @@
 using ProjectCostEstimator.Models;
+using ProjectCostEstimator.ViewModels;
 
 namespace ProjectCostEstimator.Views;
 
 public partial class ItemEditorPage : ContentPage
 {
+    private readonly ItemEditorViewModel viewModel;
+
     public MaterialItem? Item { get; private set; } = null;
 
-    public ItemEditorPage():this(null)
-	{		
-	}
+    public ItemEditorPage() : this(null)
+    {
+    }
 
     public ItemEditorPage(MaterialItem? item)
     {
         InitializeComponent();
         Item = item;
-        if (item is null)
-            return;
-
-        TitleEntry.Text = item.Title;
-        SourceUrlEntry.Text = item.SourceUrl;
-        UnitsEntry.Text = item.Units;
-        CostPerUnitEntry.Text = item.CostPerUnit.ToString();
-        UnitsNeededEntry.Text = item.UnitsNeeded.ToString();
+        viewModel = new ItemEditorViewModel(item);
+        BindingContext = viewModel;
     }
 
     private async void SubmitButton_Clicked(object? sender, EventArgs e)
     {
-        TotalCostLabel.Text = "Enter item details and tap Submit.";
-
-        if (string.IsNullOrWhiteSpace(TitleEntry.Text) ||
-            string.IsNullOrWhiteSpace(UnitsEntry.Text))
+        if (string.IsNullOrWhiteSpace(viewModel.Title) ||
+            string.IsNullOrWhiteSpace(viewModel.Units))
         {
             await DisplayAlertAsync("Missing details",
                 "Enter an item title and units.", "OK");
             return;
         }
 
-        if (!decimal.TryParse(CostPerUnitEntry.Text, out decimal costPerUnit) ||
-            !decimal.TryParse(UnitsNeededEntry.Text, out decimal unitsNeeded) ||
+        if (!decimal.TryParse(viewModel.CostPerUnitText, out decimal costPerUnit) ||
+            !decimal.TryParse(viewModel.UnitsNeededText, out decimal unitsNeeded) ||
             costPerUnit < 0 || unitsNeeded < 0)
         {
             await DisplayAlertAsync("Invalid numbers",
@@ -48,9 +43,9 @@ public partial class ItemEditorPage : ContentPage
         try
         {
             Item = new(
-                TitleEntry.Text.Trim(),
-                SourceUrlEntry.Text?.Trim() ?? string.Empty,
-                UnitsEntry.Text.Trim(),
+                viewModel.Title.Trim(),
+                viewModel.SourceUrl.Trim(),
+                viewModel.Units.Trim(),
                 costPerUnit,
                 unitsNeeded);
 
