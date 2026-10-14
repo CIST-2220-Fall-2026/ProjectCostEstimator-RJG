@@ -16,11 +16,11 @@
             <Label Text="Units" />
             <Entry x:Name="UnitsEntry" Placeholder="Enter units" />
             <Label Text="Cost Per Unit" />
-            <Entry x:Name="CostPerUnitEntry" Placeholder="Enter cost per unit" />
+            <Entry x:Name="CostPerUnitEntry" Placeholder="Enter cost per unit" Keyboard="Numeric" />
             <Label Text="Units Needed" />
-            <Entry x:Name="UnitsNeededEntry" Placeholder="Enter units needed" />
+            <Entry x:Name="UnitsNeededEntry" Placeholder="Enter units needed" Keyboard="Numeric" />
             <Button x:Name="SubmitButton" Text="Submit" Clicked="SubmitButton_Clicked"/>
-            <Label x:Name="TotalCostLabel" Text="Please enter item details and click Calculate." />
+            <Label x:Name="TotalCostLabel" Text="Enter item details and tap Submit." />
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>
