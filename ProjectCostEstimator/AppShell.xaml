@@ -13,11 +13,6 @@
         Route="MainPage" />
 
     <ShellContent
-        Title="Item Edit Page"
-        ContentTemplate="{DataTemplate views:EditItemPage}"
-        Route="EditItemPage" />
-
-    <ShellContent
         Title="Bill Of Materials"
         ContentTemplate="{DataTemplate views:BillOfMaterialsPage}"
         Route="BillOfMaterialsPage" />

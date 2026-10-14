@@ -21,6 +21,9 @@
                         <Label 
                             Padding="5"
                             Text="{Binding TotalCost}" />
+                        
+                        <Button x:Name="EditButton" Text="Edit" Clicked="EditButton_Clicked"/>
+                        <Button x:Name="DeleteButton" Text="Delete" Clicked="DeleteButton_Clicked" BackgroundColor="Red"/>
                     </HorizontalStackLayout>
                     
                 </DataTemplate>

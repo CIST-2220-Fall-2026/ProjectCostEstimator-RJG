@@ -4,10 +4,25 @@ namespace ProjectCostEstimator.Views;
 
 public partial class ItemEditorPage : ContentPage
 {
-	public ItemEditorPage()
-	{
-		InitializeComponent();
+    public MaterialItem? Item { get; private set; } = null;
+
+    public ItemEditorPage():this(null)
+	{		
 	}
+
+    public ItemEditorPage(MaterialItem? item)
+    {
+        InitializeComponent();
+        Item = item;
+        if (item is null)
+            return;
+
+        TitleEntry.Text = item.Title;
+        SourceUrlEntry.Text = item.SourceUrl;
+        UnitsEntry.Text = item.Units;
+        CostPerUnitEntry.Text = item.CostPerUnit.ToString();
+        UnitsNeededEntry.Text = item.UnitsNeeded.ToString();
+    }
 
     private async void SubmitButton_Clicked(object? sender, EventArgs e)
     {
@@ -32,19 +47,24 @@ public partial class ItemEditorPage : ContentPage
 
         try
         {
-            MaterialItem item = new(
+            Item = new(
                 TitleEntry.Text.Trim(),
                 SourceUrlEntry.Text?.Trim() ?? string.Empty,
                 UnitsEntry.Text.Trim(),
                 costPerUnit,
                 unitsNeeded);
 
-            TotalCostLabel.Text = item.ToString();
+            await Navigation.PopAsync();
         }
         catch (OverflowException)
         {
             await DisplayAlertAsync("Numbers too large",
                 "Enter smaller values for cost and quantity.", "OK");
         }
+    }
+
+    private async void CancelButton_Clicked(object? sender, EventArgs e)
+    {
+        await Navigation.PopAsync();
     }
 }

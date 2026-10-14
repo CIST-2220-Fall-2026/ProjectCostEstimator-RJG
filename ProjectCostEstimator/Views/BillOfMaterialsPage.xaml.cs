@@ -16,9 +16,9 @@ public partial class BillOfMaterialsPage : ContentPage
         BindingContext = this;
 	}
 
-    private async void AddNewItemButton_Clicked(object sender, EventArgs e)
+    private async void AddNewItemButton_Clicked(object? sender, EventArgs e)
     {
-        var page = new EditItemPage();
+        var page = new ItemEditorPage();
 
         // Subscribe to the Disappearing event of the EditItemPage
         // When the EditItemPage disappears, check if the item has a title and add it to the Items collection
@@ -34,5 +34,63 @@ public partial class BillOfMaterialsPage : ContentPage
         };
 
         await Navigation.PushAsync(page);
+    }
+
+    private async void EditButton_Clicked(object sender, EventArgs e)
+    {
+        if (sender is not Button button ||
+        button.BindingContext is not MaterialItem originalItem)
+        {
+            return;
+        }
+
+        var page = new ItemEditorPage(originalItem);
+
+        page.Disappearing += (s, args) =>
+        {
+            // Submit creates a new item. Cancel leaves Item pointing at originalItem.
+            if (page.Item is not MaterialItem editedItem ||
+                ReferenceEquals(editedItem, originalItem))
+            {
+                return;
+            }
+
+            int index = Items.IndexOf(originalItem);
+            if (index < 0)
+            {
+                return;
+            }
+
+            Items[index] = editedItem; // Replace the row; do not add another one.
+
+            // Items is currently a List, so notify the CollectionView manually.
+            BOMCollectionView.ItemsSource = null;
+            BOMCollectionView.ItemsSource = Items;
+        };
+
+        await Navigation.PushAsync(page);
+    }
+
+    private async void DeleteButton_Clicked(object sender, EventArgs e)
+    {
+        if (sender is not Button button ||
+            button.BindingContext is not MaterialItem item)
+        {
+            return;
+        }
+
+        //Confirm deletion with the user
+        bool result = await DisplayAlertAsync("Confirm Deletion", $"Are you sure you want to delete {item.Title}?", "Yes", "No");
+        
+        if (!result)
+        {
+            return;
+        }
+
+        Items.Remove(item);
+
+        // Notify the CollectionView manually.
+        BOMCollectionView.ItemsSource = null;
+        BOMCollectionView.ItemsSource = Items;
     }
 }
