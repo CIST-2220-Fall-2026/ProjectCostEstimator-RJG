@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024" role="img" aria-label="IoT project cost estimator app icon">
+<defs>
+  <linearGradient id="blue" x2="1" y2="1"><stop stop-color="#109AF4"/><stop offset="1" stop-color="#0753BF"/></linearGradient>
+  <linearGradient id="teal" x2="1" y2="1"><stop stop-color="#12D5C6"/><stop offset="1" stop-color="#009FA8"/></linearGradient>
+  <linearGradient id="chip" x2="0" y2="1"><stop stop-color="#137ED7"/><stop offset="1" stop-color="#053D99"/></linearGradient>
+  <linearGradient id="gold" x2="0" y2="1"><stop stop-color="#FFCD37"/><stop offset="1" stop-color="#F08A00"/></linearGradient>
+</defs>
+<rect width="1024" height="1024" fill="#06276B"/>
+<g transform="translate(81 81) scale(.84)">
+<g fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <!-- Circular network and its four connections -->
+  <circle cx="512" cy="520" r="286" stroke="#11C6C6" stroke-width="22"/>
+  <path d="M512 310V396 M356 520H408 M616 520H668 M512 638V718" stroke="#5DE8E5" stroke-width="25"/>
+
+  <!-- Microchip pins -->
+  <g stroke="#39CBF5" stroke-width="24">
+    <path d="M434 390v-34 M486 390v-34 M538 390v-34 M590 390v-34
+             M434 650v-34 M486 650v-34 M538 650v-34 M590 650v-34
+             M400 442h-35 M400 494h-35 M400 546h-35 M400 598h-35
+             M624 442h35 M624 494h35 M624 546h35 M624 598h35"/>
+  </g>
+  <rect x="394" y="394" width="236" height="236" rx="28" fill="url(#chip)"/>
+  <rect x="456" y="456" width="112" height="112" rx="15" fill="#069EAD" stroke="#7EF4E8" stroke-width="17"/>
+
+  <!-- Four sensor circles -->
+  <circle cx="512" cy="182" r="133" fill="url(#blue)"/>
+  <circle cx="174" cy="520" r="133" fill="url(#teal)"/>
+  <circle cx="850" cy="520" r="133" fill="url(#blue)"/>
+  <circle cx="512" cy="858" r="133" fill="url(#teal)"/>
+
+  <!-- Wi-Fi -->
+  <g stroke="#fff" stroke-width="18">
+    <path d="M443 155q69-58 138 0"/>
+    <path d="M467 184q45-37 90 0"/>
+    <path d="M492 211q20-17 40 0"/>
+  </g>
+  <circle cx="512" cy="239" r="10" fill="#fff"/>
+
+  <!-- Thermometer -->
+  <path d="M160 462a18 18 0 0 1 36 0v78a40 40 0 1 1-36 0z" stroke="#fff" stroke-width="15"/>
+  <path d="M178 492v79" stroke="#FFC125" stroke-width="14"/>
+  <circle cx="178" cy="573" r="18" fill="url(#gold)"/>
+
+  <!-- Sun -->
+  <circle cx="850" cy="520" r="34" fill="url(#gold)" stroke="#fff" stroke-width="12"/>
+  <g stroke="#fff" stroke-width="13">
+    <path d="M850 445v-17 M850 612v-17 M775 520h-17 M942 520h-17
+             M797 467l-13-13 M916 586l-13-13 M797 573l-13 13 M916 454l-13 13"/>
+  </g>
+
+  <!-- Leaf -->
+  <path d="M512 924v-86" stroke="#fff" stroke-width="16"/>
+  <path d="M509 861c-47 1-76-26-80-79 48-2 76 24 80 79z" fill="#fff"/>
+  <path d="M516 861c47 1 76-26 80-79-48-2-76 24-80 79z" fill="#fff"/>
+
+  <!-- Orange cost/data accent -->
+  <g transform="translate(605 591)">
+    <path d="M0 34v74c0 24 124 24 124 0V34" fill="#F49B05"/>
+    <ellipse cx="62" cy="34" rx="62" ry="27" fill="url(#gold)" stroke="#fff" stroke-width="11"/>
+    <path d="M0 70c0 24 124 24 124 0" stroke="#fff" stroke-width="10"/>
+  </g>
+</g>
+</g>
+</svg>
