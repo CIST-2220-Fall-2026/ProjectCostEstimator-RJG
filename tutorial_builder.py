@@ -2,6 +2,7 @@ from pathlib import Path
 from docx import Document
 from docx.shared import Inches, Pt
 from docx.enum.text import WD_BREAK
+from docx.enum.text import WD_ALIGN_PARAGRAPH
 from docx.oxml import OxmlElement
 from docx.oxml.ns import qn
 
@@ -9,7 +10,7 @@ ROOT = Path(__file__).parent
 OUT = ROOT / 'Tutorials'
 OUT.mkdir(exist_ok=True)
 
-def build(number, title, introduction, steps, files, references, starting_point=None):
+def build(number, title, introduction, steps, files, references, starting_point=None, visuals=None):
     folder = OUT / f'Module {number}'
     folder.mkdir(parents=True, exist_ok=True)
     doc = Document()
@@ -42,6 +43,17 @@ def build(number, title, introduction, steps, files, references, starting_point=
         doc.add_paragraph('Concept. ' + goal)
         doc.add_paragraph('Do. ' + work)
         doc.add_paragraph('Check. ' + check)
+        for filename, caption in (visuals or {}).get(i, []):
+            image_path = folder / filename
+            if not image_path.is_file():
+                raise FileNotFoundError(image_path)
+            image_paragraph = doc.add_paragraph()
+            image_paragraph.alignment = WD_ALIGN_PARAGRAPH.CENTER
+            image_paragraph.paragraph_format.keep_with_next = True
+            image_paragraph.add_run().add_picture(str(image_path), width=Inches(6.7))
+            caption_paragraph = doc.add_paragraph('Figure. ' + caption)
+            caption_paragraph.style = 'Caption'
+            caption_paragraph.paragraph_format.keep_together = True
     doc.add_heading('Further reading', 1)
     for ref in references:
         doc.add_paragraph(ref)
@@ -80,7 +92,10 @@ if __name__ == '__main__':
                 ('Review generated code', 'Explain what was removed and what remains', 'Compare with Module 7. Point to the generated command names used by XAML. Explain why the validation method is still handwritten.', 'Windows build has zero warnings and errors; the complete workflow works.'),
             ],
             [('ProjectCostEstimator.csproj', source/'ProjectCostEstimator.csproj'), ('ViewModels/ItemEditorViewModel.cs', source/'ViewModels'/'ItemEditorViewModel.cs'), ('ViewModels/BillOfMaterialsViewModel.cs', source/'ViewModels'/'BillOfMaterialsViewModel.cs')],
-            ['https://learn.microsoft.com/dotnet/communitytoolkit/mvvm/generators/observableproperty', 'https://learn.microsoft.com/dotnet/communitytoolkit/mvvm/generators/relaycommand'])
+            ['https://learn.microsoft.com/dotnet/communitytoolkit/mvvm/generators/observableproperty', 'https://learn.microsoft.com/dotnet/communitytoolkit/mvvm/generators/relaycommand'],
+            visuals={1: [('module-8-concept.png', 'The toolkit generates binding and command plumbing while the view model keeps application rules.')],
+                     2: [('editor-toolkit.png', 'The editor still shows a live total and enabled Submit after its properties become generated.')],
+                     5: [('bom-toolkit.png', 'Generated commands still add and change Bill of Materials rows.')]})
     elif number == 9:
         build(9, 'MVVM Navigation and Dialog Boundaries',
             'Complete the dependency injection story by letting the container create both pages and both view models. The BOM view model asks an interface to edit an item or confirm deletion. The MAUI implementation handles navigation and the system alert. This makes the decision logic testable without opening a window.',
@@ -92,7 +107,10 @@ if __name__ == '__main__':
                 ('Reduce page code', 'Keep the page focused on binding', 'Remove BOM page event handlers. Its constructor only accepts the view model and sets BindingContext. Register the interaction implementation in MauiProgram.', 'The page has no BOM data decisions; the view model has no MAUI page dependency.'),
             ],
             [('Services/IBomInteractionService.cs', source/'Services'/'IBomInteractionService.cs'), ('Services/MauiBomInteractionService.cs', source/'Services'/'MauiBomInteractionService.cs'), ('ViewModels/BillOfMaterialsViewModel.cs', source/'ViewModels'/'BillOfMaterialsViewModel.cs'), ('ViewModels/ItemEditorViewModel.cs', source/'ViewModels'/'ItemEditorViewModel.cs'), ('Views/ItemEditorPage.xaml.cs', source/'Views'/'ItemEditorPage.xaml.cs'), ('Views/BillOfMaterialsPage.xaml.cs', source/'Views'/'BillOfMaterialsPage.xaml.cs'), ('MauiProgram.cs', source/'MauiProgram.cs')],
-            ['https://learn.microsoft.com/dotnet/maui/fundamentals/dependency-injection/', 'https://learn.microsoft.com/dotnet/communitytoolkit/mvvm/generators/relaycommand'])
+            ['https://learn.microsoft.com/dotnet/maui/fundamentals/dependency-injection/', 'https://learn.microsoft.com/dotnet/communitytoolkit/mvvm/generators/relaycommand'],
+            visuals={2: [('module-9-concept.png', 'The view model asks for an edit or confirmation through an interface; the MAUI adapter opens pages and alerts.')],
+                     3: [('injected-editor.png', 'The injected editor opens with the selected item ready to edit.')],
+                     4: [('confirmation-service.png', 'The interaction service owns the platform confirmation alert; the view model uses its result.')]})
     elif number == 10:
         build(10, 'JSON Persistence and View Model Tests',
             'Replace the in-memory BOM service with a JSON-backed implementation while keeping the same view model and editor workflow. Add tests that prove saved items reload and that Cancel or a declined confirmation leaves the collection alone. A visible error message tells the user when loading or saving fails.',
@@ -104,7 +122,10 @@ if __name__ == '__main__':
                 ('Test without a window', 'Replace UI interactions with a fake', 'Create an xUnit test project. Test JSON save, reload, replace, and remove. Use a fake IBomInteractionService to test Cancel, declined Delete, and confirmed Delete through the generated commands.', 'All tests pass, and the Windows MAUI build has zero warnings and errors.'),
             ],
             [('Services/IBomService.cs', source/'Services'/'IBomService.cs'), ('Services/InMemoryBomService.cs', source/'Services'/'InMemoryBomService.cs'), ('Services/JsonBomService.cs', source/'Services'/'JsonBomService.cs'), ('ViewModels/BillOfMaterialsViewModel.cs', source/'ViewModels'/'BillOfMaterialsViewModel.cs'), ('Views/BillOfMaterialsPage.xaml', source/'Views'/'BillOfMaterialsPage.xaml'), ('Views/BillOfMaterialsPage.xaml.cs', source/'Views'/'BillOfMaterialsPage.xaml.cs'), ('MauiProgram.cs', source/'MauiProgram.cs'), ('ProjectCostEstimator.Tests/ProjectCostEstimator.Tests.csproj', ROOT/'ProjectCostEstimator.Tests'/'ProjectCostEstimator.Tests.csproj'), ('ProjectCostEstimator.Tests/BomTests.cs', ROOT/'ProjectCostEstimator.Tests'/'BomTests.cs')],
-            ['https://learn.microsoft.com/dotnet/maui/platform-integration/storage/file-system-helpers', 'https://learn.microsoft.com/dotnet/standard/serialization/system-text-json/how-to', 'https://learn.microsoft.com/dotnet/core/testing/unit-testing-csharp-with-xunit'])
+            ['https://learn.microsoft.com/dotnet/maui/platform-integration/storage/file-system-helpers', 'https://learn.microsoft.com/dotnet/standard/serialization/system-text-json/how-to', 'https://learn.microsoft.com/dotnet/core/testing/unit-testing-csharp-with-xunit'],
+            visuals={2: [('module-10-concept.png', 'The view model uses the service contract; the JSON implementation saves and reloads the collection.')],
+                     4: [('saved-item.png', 'The new item appears after it has been saved.'),
+                         ('reloaded-item.png', 'The same item appears after closing and reopening the application.')]})
     elif number == 11:
         reference = ROOT / 'Module11Reference'
         build(11, 'Rebuild the Estimator with MVVM from the Start',
@@ -124,4 +145,8 @@ if __name__ == '__main__':
             ],
             [('Services/IBomService.cs', reference/'Services'/'IBomService.cs'), ('Services/JsonBomService.cs', reference/'Services'/'JsonBomService.cs'), ('ViewModels/ItemEditorViewModel.cs', reference/'ViewModels'/'ItemEditorViewModel.cs'), ('ViewModels/BillOfMaterialsViewModel.cs', reference/'ViewModels'/'BillOfMaterialsViewModel.cs'), ('Services/IBomInteractionService.cs', reference/'Services'/'IBomInteractionService.cs'), ('Services/MauiBomInteractionService.cs', reference/'Services'/'MauiBomInteractionService.cs'), ('Views/ItemEditorPage.xaml', reference/'Views'/'ItemEditorPage.xaml'), ('Views/BillOfMaterialsPage.xaml', reference/'Views'/'BillOfMaterialsPage.xaml')],
             ['https://learn.microsoft.com/dotnet/maui/fundamentals/dependency-injection/', 'https://learn.microsoft.com/dotnet/communitytoolkit/mvvm/', 'https://learn.microsoft.com/dotnet/maui/platform-integration/storage/file-system-helpers'],
-            starting_point='Create a new .NET MAUI App in Visual Studio with the project name ProjectCostEstimator and the .NET 10 framework. Module11Reference is the complete working result. The earlier module project stays available for comparison. Build the Windows target after each connected group of files, then run its workflow. Write the redo in your new project before comparing with the reference.')
+            starting_point='Create a new .NET MAUI App in Visual Studio with the project name ProjectCostEstimator and the .NET 10 framework. Module11Reference is the complete working result. The earlier module project stays available for comparison. Build the Windows target after each connected group of files, then run its workflow. Write the redo in your new project before comparing with the reference.',
+            visuals={2: [('module-11-concept.png', 'Plan views, view models, and services before implementing the redo.')],
+                     6: [('reference-editor.png', 'The completed editor binds its fields and commands to an editor view model.')],
+                     8: [('reference-bom.png', 'The completed Bill of Materials shows one row and the Add, Edit, and Delete actions.')],
+                     9: [('reference-home.png', 'The completed Home page is reached through Shell navigation.')]})
