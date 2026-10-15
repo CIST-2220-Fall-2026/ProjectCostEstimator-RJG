@@ -7,10 +7,10 @@ public partial class BillOfMaterialsPage : ContentPage
 {
     private readonly BillOfMaterialsViewModel viewModel;
 
-    public BillOfMaterialsPage()
+    public BillOfMaterialsPage(BillOfMaterialsViewModel viewModel)
     {
         InitializeComponent();
-        viewModel = new BillOfMaterialsViewModel();
+        this.viewModel = viewModel;
         viewModel.AddRequested += OnAddRequested;
         viewModel.EditRequested += OnEditRequested;
         viewModel.DeleteRequested += OnDeleteRequested;

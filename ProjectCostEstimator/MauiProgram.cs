@@ -1,4 +1,7 @@
-﻿using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging;
+using ProjectCostEstimator.Services;
+using ProjectCostEstimator.ViewModels;
+using ProjectCostEstimator.Views;
 
 namespace ProjectCostEstimator
 {
@@ -18,6 +21,10 @@ namespace ProjectCostEstimator
 #if DEBUG
     		builder.Logging.AddDebug();
 #endif
+
+            builder.Services.AddSingleton<IBomService, InMemoryBomService>();
+            builder.Services.AddTransient<BillOfMaterialsViewModel>();
+            builder.Services.AddTransient<BillOfMaterialsPage>();
 
             return builder.Build();
         }
