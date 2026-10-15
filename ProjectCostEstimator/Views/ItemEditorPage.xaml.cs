@@ -9,19 +9,16 @@ public partial class ItemEditorPage : ContentPage
 
     public MaterialItem? Item { get; private set; } = null;
 
-    public ItemEditorPage() : this(null)
-    {
-    }
-
-    public ItemEditorPage(MaterialItem? item)
+    public ItemEditorPage(ItemEditorViewModel viewModel)
     {
         InitializeComponent();
-        Item = item;
-        viewModel = new ItemEditorViewModel(item);
+        this.viewModel = viewModel;
         viewModel.Submitted += OnSubmitted;
         viewModel.CancelRequested += OnCancelRequested;
         BindingContext = viewModel;
     }
+
+    public void LoadItem(MaterialItem? item) => viewModel.LoadItem(item);
 
     private async void OnSubmitted(object? sender, ItemSubmittedEventArgs e)
     {

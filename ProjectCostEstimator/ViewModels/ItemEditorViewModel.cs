@@ -34,7 +34,7 @@ public partial class ItemEditorViewModel : ObservableObject
     public event EventHandler<ItemSubmittedEventArgs>? Submitted;
     public event EventHandler? CancelRequested;
 
-    public ItemEditorViewModel(MaterialItem? item = null)
+    public ItemEditorViewModel()
     {
         Title = string.Empty;
         SourceUrl = string.Empty;
@@ -44,6 +44,10 @@ public partial class ItemEditorViewModel : ObservableObject
         TotalText = "Enter cost and quantity to see a total.";
         ValidationText = "Enter an item title and units.";
 
+    }
+
+    public void LoadItem(MaterialItem? item)
+    {
         if (item is null)
             return;
 

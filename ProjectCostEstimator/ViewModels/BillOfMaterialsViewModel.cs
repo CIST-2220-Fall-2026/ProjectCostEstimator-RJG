@@ -6,50 +6,38 @@ using ProjectCostEstimator.Services;
 
 namespace ProjectCostEstimator.ViewModels;
 
-public partial class BillOfMaterialsViewModel : ObservableObject
+public partial class BillOfMaterialsViewModel(
+    IBomService bomService,
+    IBomInteractionService interactions) : ObservableObject
 {
-    private readonly IBomService bomService;
-
     public ObservableCollection<MaterialItem> Items => bomService.Items;
 
-    public event EventHandler? AddRequested;
-    public event EventHandler<MaterialItemEventArgs>? EditRequested;
-    public event EventHandler<MaterialItemEventArgs>? DeleteRequested;
-
-    public BillOfMaterialsViewModel(IBomService bomService)
+    [RelayCommand]
+    private async Task AddAsync()
     {
-        this.bomService = bomService;
+        MaterialItem? item = await interactions.EditItemAsync(null);
+        if (item is not null)
+            bomService.AddItem(item);
     }
 
     [RelayCommand]
-    private void Add() => AddRequested?.Invoke(this, EventArgs.Empty);
-
-    [RelayCommand]
-    private void Edit(MaterialItem? item)
+    private async Task EditAsync(MaterialItem? original)
     {
-        if (item is not null && Items.Contains(item))
-            EditRequested?.Invoke(this, new MaterialItemEventArgs(item));
+        if (original is null || !Items.Contains(original))
+            return;
+
+        MaterialItem? edited = await interactions.EditItemAsync(original);
+        if (edited is not null)
+            bomService.ReplaceItem(original, edited);
     }
 
     [RelayCommand]
-    private void Delete(MaterialItem? item)
+    private async Task DeleteAsync(MaterialItem? item)
     {
-        if (item is not null && Items.Contains(item))
-            DeleteRequested?.Invoke(this, new MaterialItemEventArgs(item));
-    }
+        if (item is null || !Items.Contains(item))
+            return;
 
-    public void AddItem(MaterialItem item)
-    {
-        bomService.AddItem(item);
-    }
-
-    public void ReplaceItem(MaterialItem original, MaterialItem replacement)
-    {
-        bomService.ReplaceItem(original, replacement);
-    }
-
-    public void RemoveItem(MaterialItem item)
-    {
-        bomService.RemoveItem(item);
+        if (await interactions.ConfirmDeleteAsync(item))
+            bomService.RemoveItem(item);
     }
 }
