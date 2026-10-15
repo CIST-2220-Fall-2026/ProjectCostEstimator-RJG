@@ -1,95 +1,48 @@
-using System.ComponentModel;
-using System.Windows.Input;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using ProjectCostEstimator.Models;
 
 namespace ProjectCostEstimator.ViewModels;
 
-public class ItemEditorViewModel : INotifyPropertyChanged
+public partial class ItemEditorViewModel : ObservableObject
 {
-    private string title = string.Empty;
-    private string sourceUrl = string.Empty;
-    private string units = string.Empty;
-    private string costPerUnitText = string.Empty;
-    private string unitsNeededText = string.Empty;
-    private string totalText = "Enter cost and quantity to see a total.";
-    private string validationText = "Enter an item title and units.";
-    private readonly Command submitCommand;
+    [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(SubmitCommand))]
+    public partial string Title { get; set; }
 
-    public event PropertyChangedEventHandler? PropertyChanged;
+    [ObservableProperty]
+    public partial string SourceUrl { get; set; }
+
+    [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(SubmitCommand))]
+    public partial string Units { get; set; }
+
+    [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(SubmitCommand))]
+    public partial string CostPerUnitText { get; set; }
+
+    [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(SubmitCommand))]
+    public partial string UnitsNeededText { get; set; }
+
+    [ObservableProperty]
+    public partial string TotalText { get; set; }
+
+    [ObservableProperty]
+    public partial string ValidationText { get; set; }
+
     public event EventHandler<ItemSubmittedEventArgs>? Submitted;
     public event EventHandler? CancelRequested;
 
-    public ICommand SubmitCommand => submitCommand;
-    public ICommand CancelCommand { get; }
-
-    public string Title
-    {
-        get { return title; }
-        set
-        {
-            if (SetProperty(ref title, value, nameof(Title)))
-                UpdateFormState();
-        }
-    }
-
-    public string SourceUrl
-    {
-        get { return sourceUrl; }
-        set { SetProperty(ref sourceUrl, value, nameof(SourceUrl)); }
-    }
-
-    public string Units
-    {
-        get { return units; }
-        set
-        {
-            if (SetProperty(ref units, value, nameof(Units)))
-                UpdateFormState();
-        }
-    }
-
-    public string CostPerUnitText
-    {
-        get { return costPerUnitText; }
-        set
-        {
-            if (SetProperty(ref costPerUnitText, value, nameof(CostPerUnitText)))
-            {
-                UpdateTotalText();
-                UpdateFormState();
-            }
-        }
-    }
-
-    public string UnitsNeededText
-    {
-        get { return unitsNeededText; }
-        set
-        {
-            if (SetProperty(ref unitsNeededText, value, nameof(UnitsNeededText)))
-            {
-                UpdateTotalText();
-                UpdateFormState();
-            }
-        }
-    }
-
-    public string TotalText
-    {
-        get { return totalText; }
-        private set { SetProperty(ref totalText, value, nameof(TotalText)); }
-    }
-
-    public string ValidationText
-    {
-        get { return validationText; }
-        private set { SetProperty(ref validationText, value, nameof(ValidationText)); }
-    }
-
     public ItemEditorViewModel(MaterialItem? item = null)
     {
-        submitCommand = new Command(Submit, CanSubmit);
-        CancelCommand = new Command(() => CancelRequested?.Invoke(this, EventArgs.Empty));
+        Title = string.Empty;
+        SourceUrl = string.Empty;
+        Units = string.Empty;
+        CostPerUnitText = string.Empty;
+        UnitsNeededText = string.Empty;
+        TotalText = "Enter cost and quantity to see a total.";
+        ValidationText = "Enter an item title and units.";
 
         if (item is null)
             return;
@@ -99,6 +52,22 @@ public class ItemEditorViewModel : INotifyPropertyChanged
         Units = item.Units;
         CostPerUnitText = item.CostPerUnit.ToString();
         UnitsNeededText = item.UnitsNeeded.ToString();
+    }
+
+    partial void OnTitleChanged(string value) => UpdateFormState();
+
+    partial void OnUnitsChanged(string value) => UpdateFormState();
+
+    partial void OnCostPerUnitTextChanged(string value)
+    {
+        UpdateTotalText();
+        UpdateFormState();
+    }
+
+    partial void OnUnitsNeededTextChanged(string value)
+    {
+        UpdateTotalText();
+        UpdateFormState();
     }
 
     private bool CanSubmit() => TryValidate(out _, out _, out _);
@@ -147,9 +116,9 @@ public class ItemEditorViewModel : INotifyPropertyChanged
     {
         TryValidate(out _, out _, out string message);
         ValidationText = message;
-        submitCommand.ChangeCanExecute();
     }
 
+    [RelayCommand(CanExecute = nameof(CanSubmit))]
     private void Submit()
     {
         if (!TryValidate(out decimal cost, out decimal quantity, out string message))
@@ -168,18 +137,8 @@ public class ItemEditorViewModel : INotifyPropertyChanged
         Submitted?.Invoke(this, new ItemSubmittedEventArgs(item));
     }
 
-    private bool SetProperty(ref string field, string? value, string propertyName)
-    {
-        value ??= string.Empty;
-
-        if (field == value)
-            return false;
-
-        field = value;
-        PropertyChanged?.Invoke(this,
-            new PropertyChangedEventArgs(propertyName));
-        return true;
-    }
+    [RelayCommand]
+    private void Cancel() => CancelRequested?.Invoke(this, EventArgs.Empty);
 
     private void UpdateTotalText()
     {
