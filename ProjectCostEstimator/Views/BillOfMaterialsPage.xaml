@@ -2,7 +2,10 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:models="clr-namespace:ProjectCostEstimator.Models"
+             xmlns:viewModels="clr-namespace:ProjectCostEstimator.ViewModels"
              x:Class="ProjectCostEstimator.Views.BillOfMaterialsPage"
+             x:Name="BomPage"
+             x:DataType="viewModels:BillOfMaterialsViewModel"
              Title="BillOfMaterialsPage">
     <Grid RowDefinitions="Auto,*,Auto">
         <Label Grid.Row="0"
@@ -30,12 +33,12 @@
                                                Grid.Column="1"
                                                VerticalOptions="Center"
                                                Spacing="6">
-                            <Button x:Name="EditButton"
-                                    Text="Edit"
-                                    Clicked="EditButton_Clicked" />
-                            <Button x:Name="DeleteButton"
-                                    Text="Delete"
-                                    Clicked="DeleteButton_Clicked"
+                            <Button Text="Edit"
+                                    Command="{Binding Source={x:Reference BomPage}, Path=BindingContext.EditCommand, x:DataType={x:Null}}"
+                                    CommandParameter="{Binding .}" />
+                            <Button Text="Delete"
+                                    Command="{Binding Source={x:Reference BomPage}, Path=BindingContext.DeleteCommand, x:DataType={x:Null}}"
+                                    CommandParameter="{Binding .}"
                                     BackgroundColor="Red"
                                     TextColor="White" />
                         </HorizontalStackLayout>
@@ -45,8 +48,7 @@
         </CollectionView>
 
         <Button Grid.Row="2"
-                x:Name="AddNewItemButton"
                 Text="Add new item"
-                Clicked="AddNewItemButton_Clicked" />
+                Command="{Binding AddCommand}" />
     </Grid>
 </ContentPage>
