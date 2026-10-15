@@ -42,6 +42,9 @@ def build(number, title, introduction, steps, files, references):
         doc.add_paragraph('Concept. ' + goal)
         doc.add_paragraph('Do. ' + work)
         doc.add_paragraph('Check. ' + check)
+    doc.add_heading('Further reading', 1)
+    for ref in references:
+        doc.add_paragraph(ref)
     doc.add_heading('Full source checkpoints', 1)
     doc.add_paragraph('The files below show the completed module. Read them after following the small steps above, or use them to compare your result.')
     for label, path in files:
@@ -55,10 +58,7 @@ def build(number, title, introduction, steps, files, references):
             p.paragraph_format.left_indent = Inches(.15)
             run = p.add_run(line or ' ')
             run.font.name = 'Consolas'
-            run.font.size = Pt(8)
-    doc.add_heading('Further reading', 1)
-    for ref in references:
-        doc.add_paragraph(ref)
+            run.font.size = Pt(7.75)
     output = folder / f'Module_{number}_{title.replace(" ", "_")}_Tutorial.docx'
     doc.save(output)
     print(output)
@@ -93,3 +93,15 @@ if __name__ == '__main__':
             ],
             [('Services/IBomInteractionService.cs', source/'Services'/'IBomInteractionService.cs'), ('Services/MauiBomInteractionService.cs', source/'Services'/'MauiBomInteractionService.cs'), ('ViewModels/BillOfMaterialsViewModel.cs', source/'ViewModels'/'BillOfMaterialsViewModel.cs'), ('ViewModels/ItemEditorViewModel.cs', source/'ViewModels'/'ItemEditorViewModel.cs'), ('Views/ItemEditorPage.xaml.cs', source/'Views'/'ItemEditorPage.xaml.cs'), ('Views/BillOfMaterialsPage.xaml.cs', source/'Views'/'BillOfMaterialsPage.xaml.cs'), ('MauiProgram.cs', source/'MauiProgram.cs')],
             ['https://learn.microsoft.com/dotnet/maui/fundamentals/dependency-injection/', 'https://learn.microsoft.com/dotnet/communitytoolkit/mvvm/generators/relaycommand'])
+    elif number == 10:
+        build(10, 'JSON Persistence and View Model Tests',
+            'Replace the in-memory BOM service with a JSON-backed implementation while keeping the same view model and editor workflow. Add tests that prove saved items reload and that Cancel or a declined confirmation leaves the collection alone. A visible error message tells the user when loading or saving fails.',
+            [
+                ('Make storage asynchronous', 'Use Task-returning service operations for file work', 'Change IBomService to LoadAsync, AddItemAsync, ReplaceItemAsync, and RemoveItemAsync. Update the in-memory implementation first so the current app and tests still have a simple substitute.', 'The project builds after the interface and callers are updated.'),
+                ('Write a JSON service', 'Separate persisted data from UI behavior', 'Add JsonBomService with a file path constructor. Load the JSON list into its observable collection. Save a temporary file and move it over the previous file after successful serialization. Serialize operations with SemaphoreSlim.', 'A new service instance can reload what a previous instance saved.'),
+                ('Handle save failures', 'Preserve the visible collection when storage fails', 'For Add, Edit, and Delete, change the observable collection, attempt to save, and undo the change if the save throws. Let the view model show a concise error.', 'A failed save does not leave an unsaved row on screen.'),
+                ('Load when the page appears', 'Connect page lifecycle to view model loading', 'Register JsonBomService as the singleton IBomService using FileSystem.AppDataDirectory. Invoke the generated LoadCommand from the BOM page OnAppearing method. Bind ErrorText above the collection.', 'A new app run restores the saved list, including edits and deletions.'),
+                ('Test without a window', 'Replace UI interactions with a fake', 'Create an xUnit test project. Test JSON save, reload, replace, and remove. Use a fake IBomInteractionService to test Cancel, declined Delete, and confirmed Delete through the generated commands.', 'All tests pass, and the Windows MAUI build has zero warnings and errors.'),
+            ],
+            [('Services/IBomService.cs', source/'Services'/'IBomService.cs'), ('Services/InMemoryBomService.cs', source/'Services'/'InMemoryBomService.cs'), ('Services/JsonBomService.cs', source/'Services'/'JsonBomService.cs'), ('ViewModels/BillOfMaterialsViewModel.cs', source/'ViewModels'/'BillOfMaterialsViewModel.cs'), ('Views/BillOfMaterialsPage.xaml', source/'Views'/'BillOfMaterialsPage.xaml'), ('Views/BillOfMaterialsPage.xaml.cs', source/'Views'/'BillOfMaterialsPage.xaml.cs'), ('MauiProgram.cs', source/'MauiProgram.cs'), ('ProjectCostEstimator.Tests/ProjectCostEstimator.Tests.csproj', ROOT/'ProjectCostEstimator.Tests'/'ProjectCostEstimator.Tests.csproj'), ('ProjectCostEstimator.Tests/BomTests.cs', ROOT/'ProjectCostEstimator.Tests'/'BomTests.cs')],
+            ['https://learn.microsoft.com/dotnet/maui/platform-integration/storage/file-system-helpers', 'https://learn.microsoft.com/dotnet/standard/serialization/system-text-json/how-to', 'https://learn.microsoft.com/dotnet/core/testing/unit-testing-csharp-with-xunit'])

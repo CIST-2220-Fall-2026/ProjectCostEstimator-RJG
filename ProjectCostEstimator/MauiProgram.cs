@@ -22,7 +22,8 @@ namespace ProjectCostEstimator
     		builder.Logging.AddDebug();
 #endif
 
-            builder.Services.AddSingleton<IBomService, InMemoryBomService>();
+            builder.Services.AddSingleton<IBomService>(_ =>
+                new JsonBomService(Path.Combine(FileSystem.AppDataDirectory, "bom.json")));
             builder.Services.AddSingleton<IBomInteractionService, MauiBomInteractionService>();
             builder.Services.AddTransient<BillOfMaterialsViewModel>();
             builder.Services.AddTransient<BillOfMaterialsPage>();

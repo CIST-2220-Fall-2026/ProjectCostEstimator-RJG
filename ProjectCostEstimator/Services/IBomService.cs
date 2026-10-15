@@ -7,9 +7,11 @@ public interface IBomService
 {
     ObservableCollection<MaterialItem> Items { get; }
 
-    void AddItem(MaterialItem item);
+    Task LoadAsync();
 
-    void ReplaceItem(MaterialItem original, MaterialItem replacement);
+    Task AddItemAsync(MaterialItem item);
 
-    void RemoveItem(MaterialItem item);
+    Task ReplaceItemAsync(MaterialItem original, MaterialItem replacement);
+
+    Task RemoveItemAsync(MaterialItem item);
 }

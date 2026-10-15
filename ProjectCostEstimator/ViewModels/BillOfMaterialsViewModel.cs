@@ -12,12 +12,33 @@ public partial class BillOfMaterialsViewModel(
 {
     public ObservableCollection<MaterialItem> Items => bomService.Items;
 
+    [ObservableProperty]
+    public partial string ErrorText { get; set; }
+
+    [RelayCommand]
+    private async Task LoadAsync()
+    {
+        try
+        {
+            await bomService.LoadAsync();
+            ErrorText = string.Empty;
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or System.Text.Json.JsonException)
+        {
+            ErrorText = $"Could not load the bill of materials: {ex.Message}";
+        }
+    }
+
     [RelayCommand]
     private async Task AddAsync()
     {
         MaterialItem? item = await interactions.EditItemAsync(null);
         if (item is not null)
-            bomService.AddItem(item);
+        {
+            try { await bomService.AddItemAsync(item); ErrorText = string.Empty; }
+            catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+            { ErrorText = $"Could not save the item: {ex.Message}"; }
+        }
     }
 
     [RelayCommand]
@@ -28,7 +49,11 @@ public partial class BillOfMaterialsViewModel(
 
         MaterialItem? edited = await interactions.EditItemAsync(original);
         if (edited is not null)
-            bomService.ReplaceItem(original, edited);
+        {
+            try { await bomService.ReplaceItemAsync(original, edited); ErrorText = string.Empty; }
+            catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+            { ErrorText = $"Could not save the edit: {ex.Message}"; }
+        }
     }
 
     [RelayCommand]
@@ -38,6 +63,10 @@ public partial class BillOfMaterialsViewModel(
             return;
 
         if (await interactions.ConfirmDeleteAsync(item))
-            bomService.RemoveItem(item);
+        {
+            try { await bomService.RemoveItemAsync(item); ErrorText = string.Empty; }
+            catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+            { ErrorText = $"Could not save the deletion: {ex.Message}"; }
+        }
     }
 }
