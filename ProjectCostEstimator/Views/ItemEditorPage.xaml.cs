@@ -23,9 +23,9 @@ public partial class ItemEditorPage : ContentPage
         BindingContext = viewModel;
     }
 
-    private async void OnSubmitted(object? sender, MaterialItem item)
+    private async void OnSubmitted(object? sender, ItemSubmittedEventArgs e)
     {
-        Item = item;
+        Item = e.Item;
         await Navigation.PopAsync();
     }
 

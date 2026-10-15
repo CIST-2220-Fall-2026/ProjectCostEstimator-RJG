@@ -34,8 +34,9 @@ public partial class BillOfMaterialsPage : ContentPage
         await Navigation.PushAsync(page);
     }
 
-    private async void OnEditRequested(object? sender, MaterialItem originalItem)
+    private async void OnEditRequested(object? sender, MaterialItemEventArgs e)
     {
+        MaterialItem originalItem = e.Item;
         var page = new ItemEditorPage(originalItem);
 
         page.Disappearing += (s, args) =>
@@ -53,8 +54,9 @@ public partial class BillOfMaterialsPage : ContentPage
         await Navigation.PushAsync(page);
     }
 
-    private async void OnDeleteRequested(object? sender, MaterialItem item)
+    private async void OnDeleteRequested(object? sender, MaterialItemEventArgs e)
     {
+        MaterialItem item = e.Item;
         bool result = await DisplayAlertAsync("Confirm Deletion", $"Are you sure you want to delete {item.Title}?", "Yes", "No");
         
         if (!result)

@@ -16,7 +16,7 @@ public class ItemEditorViewModel : INotifyPropertyChanged
     private readonly Command submitCommand;
 
     public event PropertyChangedEventHandler? PropertyChanged;
-    public event EventHandler<MaterialItem>? Submitted;
+    public event EventHandler<ItemSubmittedEventArgs>? Submitted;
     public event EventHandler? CancelRequested;
 
     public ICommand SubmitCommand => submitCommand;
@@ -165,7 +165,7 @@ public class ItemEditorViewModel : INotifyPropertyChanged
             cost,
             quantity);
 
-        Submitted?.Invoke(this, item);
+        Submitted?.Invoke(this, new ItemSubmittedEventArgs(item));
     }
 
     private bool SetProperty(ref string field, string? value, string propertyName)

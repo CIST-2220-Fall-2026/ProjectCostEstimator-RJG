@@ -16,8 +16,8 @@ public class BillOfMaterialsViewModel
     public ICommand DeleteCommand { get; }
 
     public event EventHandler? AddRequested;
-    public event EventHandler<MaterialItem>? EditRequested;
-    public event EventHandler<MaterialItem>? DeleteRequested;
+    public event EventHandler<MaterialItemEventArgs>? EditRequested;
+    public event EventHandler<MaterialItemEventArgs>? DeleteRequested;
     public event EventHandler? ItemsChanged;
 
     public BillOfMaterialsViewModel()
@@ -26,12 +26,12 @@ public class BillOfMaterialsViewModel
         EditCommand = new Command<MaterialItem>(item =>
         {
             if (item is not null && Items.Contains(item))
-                EditRequested?.Invoke(this, item);
+                EditRequested?.Invoke(this, new MaterialItemEventArgs(item));
         });
         DeleteCommand = new Command<MaterialItem>(item =>
         {
             if (item is not null && Items.Contains(item))
-                DeleteRequested?.Invoke(this, item);
+                DeleteRequested?.Invoke(this, new MaterialItemEventArgs(item));
         });
     }
 
