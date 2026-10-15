@@ -14,7 +14,6 @@ public partial class BillOfMaterialsPage : ContentPage
         viewModel.AddRequested += OnAddRequested;
         viewModel.EditRequested += OnEditRequested;
         viewModel.DeleteRequested += OnDeleteRequested;
-        viewModel.ItemsChanged += OnItemsChanged;
         BindingContext = viewModel;
     }
 
@@ -65,12 +64,5 @@ public partial class BillOfMaterialsPage : ContentPage
         }
 
         viewModel.RemoveItem(item);
-    }
-
-    private void OnItemsChanged(object? sender, EventArgs e)
-    {
-        // Items is still a List, so CollectionView needs a manual refresh.
-        BOMCollectionView.ItemsSource = null;
-        BOMCollectionView.ItemsSource = viewModel.Items;
     }
 }
