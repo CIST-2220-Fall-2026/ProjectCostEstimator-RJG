@@ -43,7 +43,7 @@ modules = [
     (8, 'MVVM Toolkit refactor', 'Use generated observable properties and commands while retaining explicit validation rules.', 'The app behaves as before with less notification and command boilerplate.'),
     (9, 'Navigation and dialog boundaries', 'Inject the editor view model and use a small interaction interface for editor results and delete confirmation.', 'View model decisions can run without a MAUI page.'),
     (10, 'Persistence and tests', 'Save the BOM as JSON, load it on return, surface errors, and test services and view models.', 'Changes survive restart and automated behavior checks pass.'),
-    (11, 'MVVM redo from the start', 'Rebuild the full app from a clean MAUI starter using the final architecture.', 'The independent reference builds; the redo passes UI and automated checks.'),
+    (11, 'MVVM redo from the start', 'Create a new .NET MAUI App in Visual Studio and rebuild the full app using the final architecture.', 'The independent reference builds; the redo passes UI and automated checks.'),
 ]
 
 doc.add_heading('Module sequence', 1)
@@ -58,7 +58,7 @@ doc.add_heading('Teaching and assessment boundaries', 1)
 doc.add_paragraph('Keep a working app at the end of every module. Build the Windows target and check Add, Edit, Cancel, and Delete whenever those paths change. Modules 8 and 9 are refactors: the visible behavior should stay familiar. Module 10 deliberately changes storage from memory to disk. Module 11 begins with the clean template and should be assessed as an independent rebuild, using the reference only after each attempt.')
 doc.add_paragraph('Navigation and platform alerts remain UI concerns, implemented through a small MAUI adapter. The view models own decisions and depend on interfaces. Production-style MVVM here means deliberate boundaries, generated notification and command code, persistence, and tests; it does not require empty page code files.')
 doc.add_heading('Deliverables', 1)
-doc.add_paragraph('Modules 1 through 11 each have a Word tutorial and captured app screens in the curriculum folder. The Module 11 branch also contains Module11Starter, Module11Reference, and Module11Reference.Tests. Feature branches for Modules 8 through 11 are pushed separately so each lesson can be reviewed at its own endpoint.')
+doc.add_paragraph('Modules 1 through 11 each have a Word tutorial and captured app screens in the curriculum folder. Module 11 begins by creating a new project in Visual Studio; the branch contains Module11Reference and Module11Reference.Tests for comparison. Feature branches for Modules 8 through 11 are pushed separately so each lesson can be reviewed at its own endpoint.')
 doc.save(output)
 curriculum = Path(r'C:\Users\Rob011235\Dropbox\CNM\_Curriculum\CIST 2220 C# .NET I\MAUI') / output.name
 curriculum.write_bytes(output.read_bytes())
