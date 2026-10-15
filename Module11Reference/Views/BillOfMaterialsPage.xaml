@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:models="clr-namespace:ProjectCostEstimator.Models"
+             xmlns:viewModels="clr-namespace:ProjectCostEstimator.ViewModels"
+             x:Class="ProjectCostEstimator.Views.BillOfMaterialsPage"
+             x:Name="BomPage"
+             x:DataType="viewModels:BillOfMaterialsViewModel"
+             Title="BillOfMaterialsPage">
+    <Grid RowDefinitions="Auto,Auto,*,Auto">
+        <Label Grid.Row="0"
+               Text="Bill of Materials"
+               HorizontalOptions="Center" />
+
+        <Label Grid.Row="1"
+               Text="{Binding ErrorText}"
+               TextColor="Red"
+               Padding="6,2" />
+
+        <CollectionView Grid.Row="2"
+                        x:Name="BOMCollectionView"
+                        ItemsSource="{Binding Items}">
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="models:MaterialItem">
+                    <Grid Padding="6,2"
+                          ColumnDefinitions="*,Auto"
+                          RowDefinitions="Auto,Auto"
+                          ColumnSpacing="8">
+                        <Label Grid.Row="0"
+                               Grid.Column="0"
+                               LineBreakMode="TailTruncation"
+                               Text="{Binding Title}" />
+                        <Label Grid.Row="1"
+                               Grid.Column="0"
+                               Text="{Binding TotalCost, StringFormat='Cost: {0:C}'}" />
+                        <HorizontalStackLayout Grid.Row="0"
+                                               Grid.RowSpan="2"
+                                               Grid.Column="1"
+                                               VerticalOptions="Center"
+                                               Spacing="6">
+                            <Button Text="Edit"
+                                    Command="{Binding Source={x:Reference BomPage}, Path=BindingContext.EditCommand, x:DataType={x:Null}}"
+                                    CommandParameter="{Binding .}" />
+                            <Button Text="Delete"
+                                    Command="{Binding Source={x:Reference BomPage}, Path=BindingContext.DeleteCommand, x:DataType={x:Null}}"
+                                    CommandParameter="{Binding .}"
+                                    BackgroundColor="Red"
+                                    TextColor="White" />
+                        </HorizontalStackLayout>
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <Button Grid.Row="3"
+                Text="Add new item"
+                Command="{Binding AddCommand}" />
+    </Grid>
+</ContentPage>

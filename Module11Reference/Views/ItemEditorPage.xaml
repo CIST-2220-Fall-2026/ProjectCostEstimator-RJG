@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewModels="clr-namespace:ProjectCostEstimator.ViewModels"
+             x:Class="ProjectCostEstimator.Views.ItemEditorPage"
+             x:DataType="viewModels:ItemEditorViewModel"
+             Title="Item Editor">
+    <ScrollView>
+        <VerticalStackLayout Padding="10">
+            <Label
+            Text="Item Editor Page"
+            VerticalOptions="Center"
+            HorizontalOptions="Center" />
+            <Label Text="Title" />
+            <Entry Text="{Binding Title, Mode=TwoWay}" Placeholder="Enter item title" />
+            <Label Text="Source URL" />
+            <Entry Text="{Binding SourceUrl, Mode=TwoWay}" Placeholder="Enter source URL" />
+            <Label Text="Units" />
+            <Entry Text="{Binding Units, Mode=TwoWay}" Placeholder="Enter units" />
+            <Label Text="Cost Per Unit" />
+            <Entry Text="{Binding CostPerUnitText, Mode=TwoWay}"
+                   Placeholder="Enter cost per unit" Keyboard="Numeric" />
+            <Label Text="Units Needed" />
+            <Entry Text="{Binding UnitsNeededText, Mode=TwoWay}"
+                   Placeholder="Enter units needed" Keyboard="Numeric" />
+            <HorizontalStackLayout>
+                <Button Text="Submit" Command="{Binding SubmitCommand}" />
+                <Button Text="Cancel" Command="{Binding CancelCommand}" />
+            </HorizontalStackLayout>
+            <Label Text="{Binding TotalText}" />
+            <Label Text="{Binding ValidationText}" />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
