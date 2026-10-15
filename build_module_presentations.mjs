@@ -82,6 +82,28 @@ const courses = [
     {s:11,t:'Test the redo',pre:['Test save and reload.','Test decisions with a fake UI service.'],post:['Automated tests pass.','Add, Edit, Cancel, and Delete work.']}]},
 ];
 
+// Student explanations complement the numbered exercises in the Word tutorials.
+// Keep each image on one slide so the presenter can point to a distinct result.
+const guides = {
+  1:{idea:'How a MAUI app fits together',lines:['A ContentPage describes one screen in XAML.','Its C# file responds to events and uses C# objects.','AppShell gives the screens a navigation structure.'],image:'03-home-page.png',bridge:['Your C# model has no user interface code.','XAML chooses controls and layout for that data.','The page connects a user action to the model.'],review:['I can locate a page, its C# file, and a resource.','I can explain how Shell opens the editor.','I can trace a valid input to its total.'],read:'XAML basics and Shell',url:'https://learn.microsoft.com/dotnet/maui/xaml/fundamentals/get-started'},
+  2:{idea:'One template, many item rows',lines:['CollectionView repeats one DataTemplate for each item.','Inside a row, bindings read that row’s MaterialItem.','The page controls when the list changes.'],image:'03-bill-of-materials.png',bridge:['Add, Edit, and Delete change C# list data.','This module tells the view to refresh after a change.','Later modules make that update automatic.'],review:['I can explain what an ItemsSource contains.','I can trace Add, Edit, and Delete for one row.','I can distinguish a page destination from the editor route.'],read:'CollectionView data',url:'https://learn.microsoft.com/dotnet/maui/user-interface/controls/collectionview/populate-data'},
+  3:{idea:'Bindings connect a view to C# state',lines:['BindingContext tells a view which object supplies values.','A binding path names a property on that object.','The view model reports changes so labels update.'],image:'04-invalid-preview.png',bridge:['Entry.Text can send typed text to a view model.','A Label can read a calculated result from it.','The same binding rules also fill an edit form.'],review:['I can trace Entry.Text to a view-model property.','I can explain why PropertyChanged updates the total.','I can use x:DataType to check binding names.'],read:'Data binding and MVVM',url:'https://learn.microsoft.com/dotnet/maui/xaml/fundamentals/mvvm'},
+  4:{idea:'A command connects an action to a view model',lines:['A Button binds its Command to an ICommand property.','Execute performs the action.','CanExecute tells the Button when it can run.'],image:'01-empty-form-submit-disabled.png',bridge:['The view model owns the validation decision.','Changed input makes the command check CanExecute again.','The page still opens and closes the editor.'],review:['I can trace a Button tap to a command.','I can explain why invalid input disables Submit.','I can identify which code still belongs to the page.'],read:'Commanding with data binding',url:'https://learn.microsoft.com/dotnet/maui/fundamentals/data-binding/commanding'},
+  5:{idea:'Each row has two useful contexts',lines:['The page BindingContext is the BOM view model.','A row template BindingContext is its MaterialItem.','A row button needs both its row item and a page command.'],image:'01-bom-starting-list.png',bridge:['CommandParameter carries the selected MaterialItem.','The command handles the list decision.','The page provides the editor and confirmation UI.'],review:['I can identify the BindingContext inside a row.','I can trace one Edit command parameter.','I can explain why list refresh is still manual.'],read:'Binding context and CollectionView',url:'https://learn.microsoft.com/dotnet/maui/fundamentals/data-binding/basic-bindings'},
+  6:{idea:'The collection tells the view what changed',lines:['List<T> stores items but sends no change event.','ObservableCollection<T> reports Add and Remove.','CollectionView uses those reports to update rows.'],image:'01-starting-bom.png',bridge:['A collection change differs from a property change.','Replacing an item reports a row change.','An item’s own properties need their own notifications.'],review:['I can explain why ItemsSource resets were needed.','I can name the changes ObservableCollection reports.','I can check Add, Replace, and Remove on screen.'],read:'CollectionView data updates',url:'https://learn.microsoft.com/dotnet/maui/user-interface/controls/collectionview/populate-data'},
+  7:{idea:'Dependency injection supplies shared objects',lines:['MauiProgram registers services and view models.','The container calls a constructor with its dependencies.','An interface lets the view model use a service contract.'],image:'01-injected-bom.png',bridge:['The BOM service owns the item collection.','The view model owns user decisions and commands.','The page displays the result through bindings.'],review:['I can trace IBomService into a constructor.','I can explain why the service owns BOM data.','I can choose a lifetime for shared data.'],read:'Dependency injection',url:'https://learn.microsoft.com/dotnet/maui/fundamentals/dependency-injection'},
+  8:{idea:'Source generation removes repeated MVVM code',lines:['ObservableProperty creates a public notifying property.','RelayCommand creates a command from a method.','Your validation rules remain ordinary C# code.'],image:'module-8-concept.png',bridge:['The class is partial so generated code can join it.','A change hook runs when a generated property changes.','NotifyCanExecuteChanged updates a Button state.'],review:['I can find a generated property from its field.','I can trace a RelayCommand method to XAML.','I can separate generated plumbing from business rules.'],read:'MVVM Toolkit generators',url:'https://learn.microsoft.com/dotnet/communitytoolkit/mvvm/generators/overview'},
+  9:{idea:'A UI boundary returns a useful result',lines:['The BOM view model asks an interface for UI work.','A MAUI adapter opens the page or alert.','The result tells the view model what the user chose.'],image:'module-9-concept.png',bridge:['Submit returns an item to the caller.','Cancel or Back returns no item.','A test can supply the result without opening a page.'],review:['I can identify the UI adapter and its interface.','I can trace Submit and Cancel to different results.','I can test a BOM decision without MAUI controls.'],read:'Dependency injection and MVVM',url:'https://learn.microsoft.com/dotnet/maui/xaml/fundamentals/mvvm'},
+  10:{idea:'Storage crosses the app process boundary',lines:['An in-memory collection ends when the app closes.','A JSON file keeps item values between runs.','Async file methods let the UI await the operation.'],image:'module-10-concept.png',bridge:['The service writes in AppDataDirectory.','Load restores items when the BOM page appears.','A failed save must leave the visible list consistent.'],review:['I can trace a changed item to the JSON file.','I can explain why callers await the service.','I can describe what a failed save does to the list.'],read:'App data and file system',url:'https://learn.microsoft.com/dotnet/maui/platform-integration/storage/file-system-helpers'},
+  11:{idea:'Start with responsibilities, then connect them',lines:['The model describes one material item.','View models hold screen state and decisions.','Services provide data and UI operations through interfaces.'],image:'module-11-concept.png',bridge:['Build one working path before adding another.','Register dependencies in MauiProgram.','Bind each page to its view model.'],review:['I can build the estimator from a new MAUI project.','I can trace one action through view, view model, and service.','I can test decisions and saved data separately.'],read:'Data binding and MVVM',url:'https://learn.microsoft.com/dotnet/maui/xaml/fundamentals/mvvm'}
+};
+
+// These diagrams introduce the idea before students work through the code.
+for (const n of [2,5,6,7,8,9,10,11]) {
+  const image=guides[n].image;
+  for (const concept of courses[n-1].concepts) if (concept.img===image) concept.img=undefined;
+}
+
 function imagePath(n, filename) {
   if (n <= 7) return path.join(CURRICULUM, `Module ${n}`, `Module_${n}_Screen_Captures`, filename);
   return path.join(ROOT, 'Tutorials', `Module ${n}`, filename);
@@ -110,19 +132,25 @@ await fs.mkdir(OUTPUT,{recursive:true});
 
 for (const course of courses) {
   if (process.env.MODULE && !process.env.MODULE.split(',').map(Number).includes(course.n)) continue;
+  const guide=guides[course.n];
   const p=await PresentationFile.importPptx(await FileBlob.load(TEMPLATE));
   const cover=p.slides.items[0];
   cover.placeholders.getItem('title').text=`Module ${course.n} ${course.title}`;
   cover.placeholders.getItem('subtitle').text='IoT Project Cost Estimator';
-  cover.speakerNotes.text=`Introduce Module ${course.n}. Open the matching Word tutorial after the exercise overview.`;
-  contentSlide(p,'Exercise overview',course.overview,`Explain the work for Module ${course.n}. Show the expected app result before students start. Source: Module ${course.n} Word tutorial.`);
+  cover.speakerNotes.text=`Open the matching Word tutorial after the exercise overview. Source: Module ${course.n} Word tutorial.`;
+  contentSlide(p,'What you will build',course.overview,`Give students the outcome before they start. Source: Module ${course.n} Word tutorial.`);
+  const guideImage=imagePath(course.n,guide.image);
+  if (!(await fs.stat(guideImage).catch(()=>null))) throw new Error(`Missing image ${guideImage}`);
+  contentSlide(p,guide.idea,guide.lines,`Explain the framework idea before the first exercise step. MAUI documentation: ${guide.url}`,guideImage);
+  contentSlide(p,'From C# to the screen',guide.bridge,`Ask students to identify the C# object, the XAML control, and the connection between them. Source: Module ${course.n} Word tutorial. MAUI documentation: ${guide.url}`);
   for (const c of course.concepts) {
-    contentSlide(p,`Step ${c.s} ${c.t}`,c.pre,`Before tutorial Step ${c.s}: explain these concepts. Ask students to predict what the change will do. Then open Step ${c.s} in the Word tutorial. Source: Module ${course.n} Word tutorial.`);
+    contentSlide(p,`Step ${c.s}: ${c.t}`,c.pre,`Before tutorial Step ${c.s}: explain these concepts. Ask students to predict what the change will do. Then open Step ${c.s} in the Word tutorial. Source: Module ${course.n} Word tutorial. Related MAUI documentation: ${guide.url}`);
     const picture=c.img ? imagePath(course.n,c.img) : undefined;
     if (picture && !(await fs.stat(picture).catch(()=>null))) throw new Error(`Missing image ${picture}`);
-    contentSlide(p,`Step ${c.s} Check`,c.post,`After tutorial Step ${c.s}: run the app or inspect the code. Ask students to explain the observed result. Source: Module ${course.n} Word tutorial.`,picture);
+    contentSlide(p,`Step ${c.s}: What changed?`,c.post,`After tutorial Step ${c.s}: run the app or inspect the code. Ask students to explain the observed result. Source: Module ${course.n} Word tutorial.`,picture);
   }
-  contentSlide(p,'Module review',['Show the completed app workflow.','Explain which responsibility changed.','Check the result before the next module.'],`Use the final tutorial checklist. Ask students to explain the module concept without reading code. Source: Module ${course.n} Word tutorial.`);
+  contentSlide(p,'What you can now explain',guide.review,`Use the final tutorial checklist. Ask students to explain the module concept without reading code. Source: Module ${course.n} Word tutorial.`);
+  contentSlide(p,'Read more in MAUI documentation',[guide.read,'Search Microsoft Learn for this topic.','Try one example in a small test page.'],`Student reading: ${guide.read}. ${guide.url}`);
   const stem=`Module_${course.n}_${course.title.replaceAll(' ','_')}_Presentation_${process.env.REVISION || 'v2'}`;
   const candidate=path.join(BUILD,`${stem}.draft.pptx`);
   const final=path.join(OUTPUT,`${stem}.pptx`);
