@@ -1,12 +1,14 @@
 using ProjectCostEstimator.Models;
+using ProjectCostEstimator.ViewModels;
 
 namespace ProjectCostEstimator.Views;
 
 public partial class ItemEditorPage : ContentPage
 {
+    private readonly ItemEditorViewModel viewModel;
     public MaterialItem? Item { get; private set; } = null;
 
-    public ItemEditorPage():this(null)
+    public ItemEditorPage() : this(null)
 	{		
 	}
 
@@ -14,20 +16,12 @@ public partial class ItemEditorPage : ContentPage
     {
         InitializeComponent();
         Item = item;
-        if (item is null)
-            return;
-
-        TitleEntry.Text = item.Title;
-        SourceUrlEntry.Text = item.SourceUrl;
-        UnitsEntry.Text = item.Units;
-        CostPerUnitEntry.Text = item.CostPerUnit.ToString();
-        UnitsNeededEntry.Text = item.UnitsNeeded.ToString();
+        viewModel = new ItemEditorViewModel(item);
+        BindingContext = viewModel;
     }
 
     private async void SubmitButton_Clicked(object? sender, EventArgs e)
     {
-        TotalCostLabel.Text = "Enter item details and tap Submit.";
-
         if (string.IsNullOrWhiteSpace(TitleEntry.Text) ||
             string.IsNullOrWhiteSpace(UnitsEntry.Text))
         {
@@ -48,12 +42,11 @@ public partial class ItemEditorPage : ContentPage
         try
         {
             Item = new(
-                TitleEntry.Text.Trim(),
-                SourceUrlEntry.Text?.Trim() ?? string.Empty,
-                UnitsEntry.Text.Trim(),
+                viewModel.Title,
+                viewModel.SourceURL,
+                viewModel.Units,
                 costPerUnit,
                 unitsNeeded);
-
             await Navigation.PopAsync();
         }
         catch (OverflowException)

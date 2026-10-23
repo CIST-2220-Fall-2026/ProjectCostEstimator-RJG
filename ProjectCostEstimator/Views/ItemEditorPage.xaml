@@ -1,29 +1,31 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="ProjectCostEstimator.Views.ItemEditorPage"
+             xmlns:viewModels="x:clr-namespace:ProjectCostEstimator.ViewModels"
+             x:Class="ProjectCostEstimator.Views.ItemEditorPage"     
+             x:DataType="viewModels:ItemEditorViewModel"
              Title="Item Editor">
     <ScrollView>
         <VerticalStackLayout Padding="10">
             <Label 
-            Text="Item Editor Page"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
+                Text="Item Editor Page"
+                VerticalOptions="Center" 
+                HorizontalOptions="Center" />
             <Label Text="Title" />
-            <Entry x:Name="TitleEntry" Placeholder="Enter item title" />
+            <Entry x:Name="TitleEntry" Text ="{Binding Title, Mode=TwoWay}" Placeholder="Enter item title" />
             <Label Text="Source URL" />
-            <Entry x:Name="SourceUrlEntry" Placeholder="Enter source URL" />
+            <Entry x:Name="SourceUrlEntry" Text="{Binding SourceURL, Mode=TwoWay}}" Placeholder="Enter source URL" />
             <Label Text="Units" />
-            <Entry x:Name="UnitsEntry" Placeholder="Enter units" />
+            <Entry x:Name="UnitsEntry" Text="{Binding Units, Mode=TwoWay}" Placeholder="Enter units" />
             <Label Text="Cost Per Unit" />
-            <Entry x:Name="CostPerUnitEntry" Placeholder="Enter cost per unit" Keyboard="Numeric" />
+            <Entry x:Name="CostPerUnitEntry" Text="{Binding CostPerUnitText, Mode=TwoWay}" Placeholder="Enter cost per unit" Keyboard="Numeric" />
             <Label Text="Units Needed" />
-            <Entry x:Name="UnitsNeededEntry" Placeholder="Enter units needed" Keyboard="Numeric" />
+            <Entry x:Name="UnitsNeededEntry" Text="{Binding UnitsNeededText, Mode=TwoWay}" Placeholder="Enter units needed" Keyboard="Numeric" />
             <HorizontalStackLayout>
                 <Button x:Name="SubmitButton" Text="Submit" Clicked="SubmitButton_Clicked"/>
                 <Button x:Name="CancelButton" Text="Cancel" Clicked="CancelButton_Clicked"/>                
             </HorizontalStackLayout>
-            <Label x:Name="TotalCostLabel" Text="Enter item details and tap Submit." />
+            <Label x:Name="TotalCostLabel" Text="{Binding TotalText, Mode=TwoWay}" />
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>
