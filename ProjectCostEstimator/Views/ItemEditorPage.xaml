@@ -23,7 +23,7 @@
             <Entry x:Name="UnitsNeededEntry" Text="{Binding UnitsNeededText, Mode=TwoWay}" Placeholder="Enter units needed" Keyboard="Numeric" />
             <HorizontalStackLayout>
                 <Button x:Name="SubmitButton" Text="Submit" Command="{Binding SubmitCommand}"/>
-                <Button x:Name="CancelButton" Text="Cancel" Clicked="CancelButton_Clicked"/>                
+                <Button x:Name="CancelButton" Text="Cancel" Command="{Binding CancelCommand}"/>                
             </HorizontalStackLayout>
             <Label x:Name="TotalCostLabel" Text="{Binding TotalText, Mode=TwoWay}" />
             <Label x:Name="ValidationLabel" Text="{Binding ValidationText}" />

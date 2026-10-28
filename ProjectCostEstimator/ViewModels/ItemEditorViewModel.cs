@@ -6,13 +6,11 @@ namespace ProjectCostEstimator.ViewModels
 {
     public class ItemEditorViewModel:INotifyPropertyChanged
     {
-        public ItemEditorViewModel():this(null)
-        {                
-        }
-
-        public ItemEditorViewModel(MaterialItem? item)
+        public ItemEditorViewModel(MaterialItem? item = null)
         {
             submitCommand = new Command(Submit, CanSubmit);
+            CancelCommand = new Command(() => CancelRequested?.Invoke(this, EventArgs.Empty));
+            
             this.item = item;
             if (item == null)
             {
@@ -28,8 +26,11 @@ namespace ProjectCostEstimator.ViewModels
 
         private readonly Command submitCommand;
         public ICommand SubmitCommand { get { return submitCommand; } }
+        public ICommand CancelCommand { get; }
 
         public event EventHandler<ItemSubmittedEventArgs>? Submitted;
+        public event EventHandler? CancelRequested;
+
         private bool TryValidate(out decimal cost, out decimal quantity, out string message)
         {
             cost = 0;
