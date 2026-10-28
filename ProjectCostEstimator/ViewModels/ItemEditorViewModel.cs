@@ -110,7 +110,13 @@ namespace ProjectCostEstimator.ViewModels
         public string Units
         {
             get { return units; }
-            set { SetProperty(ref units, value, nameof(Units)); }
+            set 
+            {
+                if (SetProperty(ref units, value, nameof(Units)))
+                {
+                    UpdateFormState();
+                }
+            }
         }
 
         private string costPerUnitText = string.Empty;
@@ -123,6 +129,7 @@ namespace ProjectCostEstimator.ViewModels
                 if (SetProperty(ref costPerUnitText, value, nameof(CostPerUnitText)))
                 {
                     UpdateTotalText();
+                    UpdateFormState();
                 }
             }
         }
@@ -137,6 +144,7 @@ namespace ProjectCostEstimator.ViewModels
                 if (SetProperty(ref unitsNeededText, value, nameof(UnitsNeededText)))
                 {
                     UpdateTotalText();
+                    UpdateFormState();
                 }
             }
         }
@@ -185,6 +193,12 @@ namespace ProjectCostEstimator.ViewModels
             field = value;
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
             return true;
+        }
+
+        private void UpdateFormState()
+        {
+            TryValidate(out _, out _, out string message);
+            ValidationText = message;
         }
     }
 }

@@ -26,6 +26,7 @@
                 <Button x:Name="CancelButton" Text="Cancel" Clicked="CancelButton_Clicked"/>                
             </HorizontalStackLayout>
             <Label x:Name="TotalCostLabel" Text="{Binding TotalText, Mode=TwoWay}" />
+            <Label x:Name="ValidationLabel" Text="{Binding ValidationText}" />
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>
