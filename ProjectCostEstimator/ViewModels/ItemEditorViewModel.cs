@@ -12,7 +12,7 @@ namespace ProjectCostEstimator.ViewModels
 
         public ItemEditorViewModel(MaterialItem? item)
         {
-            SubmitCommand = new Command(Submit);
+            submitCommand = new Command(Submit, CanSubmit);
             this.item = item;
             if (item == null)
             {
@@ -26,7 +26,8 @@ namespace ProjectCostEstimator.ViewModels
             totalText = item.TotalCost.ToString();
         }
 
-        public ICommand SubmitCommand { get; }
+        private readonly Command submitCommand;
+        public ICommand SubmitCommand { get { return submitCommand; } }
 
         public event EventHandler<ItemSubmittedEventArgs>? Submitted;
         private bool TryValidate(out decimal cost, out decimal quantity, out string message)
@@ -66,6 +67,11 @@ namespace ProjectCostEstimator.ViewModels
 
             message = "Ready to submit.";
             return true;
+        }
+
+        private bool CanSubmit()
+        {
+            return TryValidate(out _, out _, out _);
         }
 
         private void Submit()
@@ -199,6 +205,7 @@ namespace ProjectCostEstimator.ViewModels
         {
             TryValidate(out _, out _, out string message);
             ValidationText = message;
+            submitCommand.ChangeCanExecute();
         }
     }
 }
