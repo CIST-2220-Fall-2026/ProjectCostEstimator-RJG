@@ -14,7 +14,7 @@
             <Label Text="Title" />
             <Entry x:Name="TitleEntry" Text ="{Binding Title, Mode=TwoWay}" Placeholder="Enter item title" />
             <Label Text="Source URL" />
-            <Entry x:Name="SourceUrlEntry" Text="{Binding SourceURL, Mode=TwoWay}}" Placeholder="Enter source URL" />
+            <Entry x:Name="SourceUrlEntry" Text="{Binding SourceURL, Mode=TwoWay}" Placeholder="Enter source URL" />
             <Label Text="Units" />
             <Entry x:Name="UnitsEntry" Text="{Binding Units, Mode=TwoWay}" Placeholder="Enter units" />
             <Label Text="Cost Per Unit" />
@@ -22,7 +22,7 @@
             <Label Text="Units Needed" />
             <Entry x:Name="UnitsNeededEntry" Text="{Binding UnitsNeededText, Mode=TwoWay}" Placeholder="Enter units needed" Keyboard="Numeric" />
             <HorizontalStackLayout>
-                <Button x:Name="SubmitButton" Text="Submit" Clicked="SubmitButton_Clicked"/>
+                <Button x:Name="SubmitButton" Text="Submit" Command="{Binding SubmitCommand}"/>
                 <Button x:Name="CancelButton" Text="Cancel" Clicked="CancelButton_Clicked"/>                
             </HorizontalStackLayout>
             <Label x:Name="TotalCostLabel" Text="{Binding TotalText, Mode=TwoWay}" />

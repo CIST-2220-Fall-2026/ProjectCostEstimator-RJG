@@ -1,8 +1,6 @@
-﻿using ProjectCostEstimator.Models;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Text;
+﻿using System.ComponentModel;
+using System.Windows.Input;
+using ProjectCostEstimator.Models;
 
 namespace ProjectCostEstimator.ViewModels
 {
@@ -14,21 +12,84 @@ namespace ProjectCostEstimator.ViewModels
 
         public ItemEditorViewModel(MaterialItem? item)
         {
+            SubmitCommand = new Command(Submit);
             this.item = item;
-            if(item != null)
+            if (item == null)
             {
-                title = item.Title;
-                sourceURL = item.SourceUrl;
-                units = item.Units;
-                costPerUnitText = item.CostPerUnit.ToString();
-                unitsNeededText = item.UnitsNeeded.ToString();
-                totalText = item.TotalCost.ToString();
+                return;
             }
+            title = item.Title;
+            sourceURL = item.SourceUrl;
+            units = item.Units;
+            costPerUnitText = item.CostPerUnit.ToString();
+            unitsNeededText = item.UnitsNeeded.ToString();
+            totalText = item.TotalCost.ToString();
+        }
+
+        public ICommand SubmitCommand { get; }
+
+        public event EventHandler<ItemSubmittedEventArgs>? Submitted;
+        private bool TryValidate(out decimal cost, out decimal quantity, out string message)
+        {
+            cost = 0;
+            quantity = 0;
+
+            if (string.IsNullOrWhiteSpace(Title) || string.IsNullOrWhiteSpace(Units))
+            {
+                message = "Enter an item title and units.";
+                return false;
+            }
+
+            if (string.IsNullOrWhiteSpace(CostPerUnitText) || string.IsNullOrWhiteSpace(UnitsNeededText))
+            {
+                message = "Enter cost and quantity.";
+                return false;
+            }
+
+            if (!decimal.TryParse(CostPerUnitText, out cost) ||
+                !decimal.TryParse(UnitsNeededText, out quantity) ||
+                cost < 0 || quantity < 0)
+            {
+                message = "Enter nonnegative numbers for cost and quantity.";
+                return false;
+            }
+
+            try
+            {
+                _ = cost * quantity;
+            }
+            catch (OverflowException)
+            {
+                message = "Numbers are too large to calculate a total.";
+                return false;
+            }
+
+            message = "Ready to submit.";
+            return true;
+        }
+
+        private void Submit()
+        {
+            if (!TryValidate(out decimal cost, out decimal quantity, out string message))
+            {
+                ValidationText = message;
+                return;
+            }
+
+            MaterialItem item = new(Title.Trim(), SourceURL.Trim(), Units.Trim(), cost,  quantity);
+            Submitted?.Invoke(this, new ItemSubmittedEventArgs(item));
         }
 
         MaterialItem? item;
 
         public event PropertyChangedEventHandler? PropertyChanged;
+
+        private string validationText = "Enter an item title and units.";
+        public string ValidationText
+        {
+            get { return validationText; }
+            private set { SetProperty(ref validationText, value, nameof(ValidationText)); }
+        }
 
         private string title = string.Empty;
         public string Title 
