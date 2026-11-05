@@ -10,8 +10,7 @@ namespace ProjectCostEstimator.ViewModels
         {
             submitCommand = new Command(Submit, CanSubmit);
             CancelCommand = new Command(() => CancelRequested?.Invoke(this, EventArgs.Empty));
-            
-            this.item = item;
+
             if (item == null)
             {
                 return;
@@ -21,15 +20,105 @@ namespace ProjectCostEstimator.ViewModels
             units = item.Units;
             costPerUnitText = item.CostPerUnit.ToString();
             unitsNeededText = item.UnitsNeeded.ToString();
-            totalText = item.TotalCost.ToString();
         }
 
         private readonly Command submitCommand;
+        public event PropertyChangedEventHandler? PropertyChanged;
+        public event EventHandler<ItemSubmittedEventArgs>? Submitted;
+        public event EventHandler? CancelRequested;
+
         public ICommand SubmitCommand { get { return submitCommand; } }
         public ICommand CancelCommand { get; }
 
-        public event EventHandler<ItemSubmittedEventArgs>? Submitted;
-        public event EventHandler? CancelRequested;
+        private string title = string.Empty;
+        public string Title
+        {
+            get { return title; }
+            set 
+            {
+                if (SetProperty(ref title, value, nameof(Title)))
+                {
+                    UpdateFormState();
+                }
+            }
+        }
+
+        private string sourceURL = string.Empty;
+        public string SourceURL
+        {
+            get { return sourceURL; }
+            set
+            {
+                if (SetProperty(ref sourceURL, value, nameof(SourceURL)))
+                {
+                    UpdateFormState();
+                }
+            }
+        }
+
+        private string units = string.Empty;
+
+        public string Units
+        {
+            get { return units; }
+            set
+            {
+                if (SetProperty(ref units, value, nameof(Units)))
+                {
+                    UpdateFormState();
+                }
+            }
+        }
+
+        private string costPerUnitText = string.Empty;
+
+        public string CostPerUnitText
+        {
+            get { return costPerUnitText; }
+            set
+            {
+                if (SetProperty(ref costPerUnitText, value, nameof(CostPerUnitText)))
+                {
+                    UpdateTotalText();
+                    UpdateFormState();
+                }
+            }
+        }
+
+        private string unitsNeededText = string.Empty;
+
+        public string UnitsNeededText
+        {
+            get { return unitsNeededText; }
+            set
+            {
+                if (SetProperty(ref unitsNeededText, value, nameof(UnitsNeededText)))
+                {
+                    UpdateTotalText();
+                    UpdateFormState();
+                }
+            }
+        }
+
+        public string totalText = "Enter item details and tap Submit.";
+        public string TotalText
+        {
+            get { return totalText; }
+
+            private set { SetProperty(ref totalText, value, nameof(TotalText)); }
+        }
+
+        private string validationText = "Enter an item title and units.";
+        public string ValidationText
+        {
+            get { return validationText; }
+            private set { SetProperty(ref validationText, value, nameof(ValidationText)); }
+        }
+
+        private bool CanSubmit()
+        {
+            return TryValidate(out _, out _, out _);
+        }
 
         private bool TryValidate(out decimal cost, out decimal quantity, out string message)
         {
@@ -70,10 +159,13 @@ namespace ProjectCostEstimator.ViewModels
             return true;
         }
 
-        private bool CanSubmit()
+        private void UpdateFormState()
         {
-            return TryValidate(out _, out _, out _);
+            TryValidate(out _, out _, out string message);
+            ValidationText = message;
+            submitCommand.ChangeCanExecute();
         }
+
 
         private void Submit()
         {
@@ -83,85 +175,26 @@ namespace ProjectCostEstimator.ViewModels
                 return;
             }
 
-            MaterialItem item = new(Title.Trim(), SourceURL.Trim(), Units.Trim(), cost,  quantity);
+            MaterialItem item = new(
+                Title.Trim(), 
+                SourceURL.Trim(), 
+                Units.Trim(), 
+                cost,  
+                quantity);
+
             Submitted?.Invoke(this, new ItemSubmittedEventArgs(item));
         }
 
-        MaterialItem? item;
-
-        public event PropertyChangedEventHandler? PropertyChanged;
-
-        private string validationText = "Enter an item title and units.";
-        public string ValidationText
+        private bool SetProperty(ref string field, string? value, string propertyName)
         {
-            get { return validationText; }
-            private set { SetProperty(ref validationText, value, nameof(ValidationText)); }
-        }
-
-        private string title = string.Empty;
-        public string Title 
-        {
-            get { return title; }
-            set { SetProperty(ref title, value, nameof(Title)); }
-        }
-
-        private string sourceURL = string.Empty;
-        public string SourceURL
-        {
-            get { return sourceURL; }
-            set { SetProperty(ref sourceURL, value, nameof(SourceURL)); }
-        }
-
-        private string units = string.Empty;
-
-        public string Units
-        {
-            get { return units; }
-            set 
+            value ??= string.Empty;
+            if (field == value)
             {
-                if (SetProperty(ref units, value, nameof(Units)))
-                {
-                    UpdateFormState();
-                }
+                return false;
             }
-        }
-
-        private string costPerUnitText = string.Empty;
-
-        public string CostPerUnitText
-        {
-            get { return costPerUnitText; }
-            set
-            {
-                if (SetProperty(ref costPerUnitText, value, nameof(CostPerUnitText)))
-                {
-                    UpdateTotalText();
-                    UpdateFormState();
-                }
-            }
-        }
-
-        private string unitsNeededText = string.Empty;
-
-        public string UnitsNeededText
-        {
-            get { return unitsNeededText; }
-            set 
-            {
-                if (SetProperty(ref unitsNeededText, value, nameof(UnitsNeededText)))
-                {
-                    UpdateTotalText();
-                    UpdateFormState();
-                }
-            }
-        }
-
-        public string totalText = "Enter item details and tap Submit.";
-        public string TotalText
-        {
-            get { return totalText; }
-
-            private set { SetProperty(ref totalText, value, nameof(TotalText)); }
+            field = value;
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            return true;
         }
 
         private void UpdateTotalText()
@@ -190,23 +223,5 @@ namespace ProjectCostEstimator.ViewModels
             }
         }
 
-        private bool SetProperty(ref string field, string? value, string propertyName)
-        {
-            value ??= string.Empty;
-            if (field == value)
-            {
-                return false;
-            }
-            field = value;
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-            return true;
-        }
-
-        private void UpdateFormState()
-        {
-            TryValidate(out _, out _, out string message);
-            ValidationText = message;
-            submitCommand.ChangeCanExecute();
-        }
     }
 }
