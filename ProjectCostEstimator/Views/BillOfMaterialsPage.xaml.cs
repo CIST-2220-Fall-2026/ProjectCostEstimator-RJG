@@ -1,19 +1,17 @@
 using ProjectCostEstimator.Models;
+using ProjectCostEstimator.ViewModels;
 
 namespace ProjectCostEstimator.Views;
 
 public partial class BillOfMaterialsPage : ContentPage
 {
-    public List<MaterialItem> Items { get; set; } = new()
-    {
-        new MaterialItem("Test1","url1","ea",25.2m,300m),
-        new MaterialItem("Test2","url2","ea",45.2m,1000m)
-    };
+    private readonly BillOfMaterialsViewModel viewModel;
 
 	public BillOfMaterialsPage()
 	{
 		InitializeComponent();
-        BindingContext = this;
+        viewModel = new BillOfMaterialsViewModel();
+        BindingContext = viewModel;
 	}
 
     private async void AddNewItemButton_Clicked(object? sender, EventArgs e)
@@ -25,10 +23,10 @@ public partial class BillOfMaterialsPage : ContentPage
         {
             if (page.Item != null)
             {
-                Items.Add(page.Item);
+                viewModel.Items.Add(page.Item);
                 // Refresh the CollectionView because Items is a List.
                 BOMCollectionView.ItemsSource = null;
-                BOMCollectionView.ItemsSource = Items;
+                BOMCollectionView.ItemsSource = viewModel.Items;
             }
         };
 
@@ -54,17 +52,17 @@ public partial class BillOfMaterialsPage : ContentPage
                 return;
             }
 
-            int index = Items.IndexOf(originalItem);
+            int index = viewModel.Items.IndexOf(originalItem);
             if (index < 0)
             {
                 return;
             }
 
-            Items[index] = editedItem; // Replace the row; do not add another one.
+            viewModel.Items[index] = editedItem; // Replace the row; do not add another one.
 
             // Items is currently a List, so notify the CollectionView manually.
             BOMCollectionView.ItemsSource = null;
-            BOMCollectionView.ItemsSource = Items;
+            BOMCollectionView.ItemsSource = viewModel.Items;
         };
 
         await Navigation.PushAsync(page);
@@ -86,10 +84,10 @@ public partial class BillOfMaterialsPage : ContentPage
             return;
         }
 
-        Items.Remove(item);
+        viewModel.Items.Remove(item);
 
         // Notify the CollectionView manually.
         BOMCollectionView.ItemsSource = null;
-        BOMCollectionView.ItemsSource = Items;
+        BOMCollectionView.ItemsSource = viewModel.Items;
     }
 }
