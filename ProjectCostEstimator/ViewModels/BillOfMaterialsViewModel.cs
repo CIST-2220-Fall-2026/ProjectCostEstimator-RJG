@@ -1,14 +1,12 @@
 ﻿using ProjectCostEstimator.Models;
-using System;
-using System.Collections.Generic;
-using System.Text;
+using System.Collections.ObjectModel;
 using System.Windows.Input;
 
 namespace ProjectCostEstimator.ViewModels
 {
     public class BillOfMaterialsViewModel
     {
-        public List<MaterialItem> Items { get; } = new()
+        public ObservableCollection<MaterialItem> Items { get; } = new()
         {
             new MaterialItem("Test1", "url1", "ea", 25.2m, 300m),
             new MaterialItem("Test2", "url2", "ea", 45.2m, 1000m)
@@ -21,7 +19,6 @@ namespace ProjectCostEstimator.ViewModels
         public event EventHandler? AddRequested;
         public event EventHandler<MaterialItemEventArgs>? EditRequested;
         public event EventHandler<MaterialItemEventArgs>? DeleteRequested;
-        public event EventHandler? ItemsChanged;
 
         public BillOfMaterialsViewModel()
         {
@@ -43,7 +40,6 @@ namespace ProjectCostEstimator.ViewModels
         public void AddItem(MaterialItem item)
         {
             Items.Add(item);
-            ItemsChanged?.Invoke(this, EventArgs.Empty);
         }
         public void ReplaceItem(MaterialItem original, MaterialItem replacement)
         {
@@ -52,13 +48,11 @@ namespace ProjectCostEstimator.ViewModels
                 return;
 
             Items[index] = replacement;
-            ItemsChanged?.Invoke(this, EventArgs.Empty);
         }
 
         public void RemoveItem(MaterialItem item)
         {
-            if (Items.Remove(item))
-                ItemsChanged?.Invoke(this, EventArgs.Empty);
+            Items.Remove(item);
         }
     }
 }
