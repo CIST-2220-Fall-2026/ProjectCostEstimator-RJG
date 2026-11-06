@@ -7,10 +7,10 @@ public partial class BillOfMaterialsPage : ContentPage
 {
     private readonly BillOfMaterialsViewModel viewModel;
 
-    public BillOfMaterialsPage()
+    public BillOfMaterialsPage(BillOfMaterialsViewModel viewModel)
 	{
 		InitializeComponent();
-        viewModel = new BillOfMaterialsViewModel();
+        this.viewModel = viewModel;
         viewModel.AddRequested += OnAddRequested;
         viewModel.EditRequested += OnEditRequested;
         viewModel.DeleteRequested += OnDeleteRequested;
@@ -26,7 +26,7 @@ public partial class BillOfMaterialsPage : ContentPage
         {
             if (page.Item != null)
             {
-                viewModel.AddItem(page.Item); // RJG don't add to list directly
+                viewModel.AddItem(page.Item); // don't add to list directly
             }
         };
 
