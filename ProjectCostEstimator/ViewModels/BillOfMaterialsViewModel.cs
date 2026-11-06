@@ -1,19 +1,14 @@
 ﻿using ProjectCostEstimator.Models;
-using System;
-using System.Collections.Generic;
+using ProjectCostEstimator.Services;
 using System.Collections.ObjectModel;
-using System.Text;
 using System.Windows.Input;
 
 namespace ProjectCostEstimator.ViewModels
 {
     public class BillOfMaterialsViewModel
     {
-        public ObservableCollection<MaterialItem> Items { get; } = new()
-        {
-            new MaterialItem("Test1", "url1", "ea", 25.2m, 300m),
-            new MaterialItem("Test2", "url2", "ea", 45.2m, 1000m)
-        };
+        private readonly IBomService bomService;
+        public ObservableCollection<MaterialItem> Items { get { return bomService.Items; } }
 
         public ICommand AddCommand { get; }
         public ICommand EditCommand { get; }
@@ -23,8 +18,10 @@ namespace ProjectCostEstimator.ViewModels
         public event EventHandler<MaterialItemEventArgs>? EditRequested;
         public event EventHandler<MaterialItemEventArgs>? DeleteRequested;
 
-        public BillOfMaterialsViewModel()
+        public BillOfMaterialsViewModel(IBomService bomService)
         {
+            this.bomService = bomService;
+
             AddCommand = new Command(() => AddRequested?.Invoke(this, EventArgs.Empty));
        
             EditCommand = new Command<MaterialItem>(item =>
@@ -42,20 +39,16 @@ namespace ProjectCostEstimator.ViewModels
 
         public void AddItem(MaterialItem item)
         {
-            Items.Add(item);
+            bomService.AddItem(item);
         }
         public void ReplaceItem(MaterialItem original, MaterialItem replacement)
         {
-            int index = Items.IndexOf(original);
-            if (index < 0)
-                return;
-
-            Items[index] = replacement;
+            bomService.ReplaceItem(original, replacement);
         }
 
         public void RemoveItem(MaterialItem item)
         {
-            Items.Remove(item);
+            bomService.RemoveItem(item);
         }
     }
 }
