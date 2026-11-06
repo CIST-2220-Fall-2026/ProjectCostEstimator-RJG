@@ -7,14 +7,18 @@ public partial class BillOfMaterialsPage : ContentPage
 {
     private readonly BillOfMaterialsViewModel viewModel;
 
-	public BillOfMaterialsPage()
-	{
-		InitializeComponent();
+    public BillOfMaterialsPage()
+    {
+        InitializeComponent();
         viewModel = new BillOfMaterialsViewModel();
+        viewModel.AddRequested += OnAddRequested; 
+        viewModel.EditRequested += OnEditRequested;
+        viewModel.DeleteRequested += OnDeleteRequested;
+        viewModel.ItemsChanged += OnItemsChanged;
         BindingContext = viewModel;
-	}
+    }
 
-    private async void AddNewItemButton_Clicked(object? sender, EventArgs e)
+    private async void OnAddRequested(object? sender, EventArgs e)
     {
         var page = new ItemEditorPage();
 
@@ -23,24 +27,16 @@ public partial class BillOfMaterialsPage : ContentPage
         {
             if (page.Item != null)
             {
-                viewModel.Items.Add(page.Item);
-                // Refresh the CollectionView because Items is a List.
-                BOMCollectionView.ItemsSource = null;
-                BOMCollectionView.ItemsSource = viewModel.Items;
+                viewModel.AddItem(page.Item);
             }
         };
 
         await Navigation.PushAsync(page);
     }
 
-    private async void EditButton_Clicked(object? sender, EventArgs e)
+    private async void OnEditRequested(object? sender, MaterialItemEventArgs e)
     {
-        if (sender is not Button button ||
-        button.BindingContext is not MaterialItem originalItem)
-        {
-            return;
-        }
-
+        MaterialItem originalItem = e.Item;
         var page = new ItemEditorPage(originalItem);
 
         page.Disappearing += (s, args) =>
@@ -52,40 +48,27 @@ public partial class BillOfMaterialsPage : ContentPage
                 return;
             }
 
-            int index = viewModel.Items.IndexOf(originalItem);
-            if (index < 0)
-            {
-                return;
-            }
-
-            viewModel.Items[index] = editedItem; // Replace the row; do not add another one.
-
-            // Items is currently a List, so notify the CollectionView manually.
-            BOMCollectionView.ItemsSource = null;
-            BOMCollectionView.ItemsSource = viewModel.Items;
+            viewModel.ReplaceItem(originalItem, editedItem);
         };
 
         await Navigation.PushAsync(page);
     }
 
-    private async void DeleteButton_Clicked(object? sender, EventArgs e)
+    private async void OnDeleteRequested(object? sender, MaterialItemEventArgs e)
     {
-        if (sender is not Button button ||
-            button.BindingContext is not MaterialItem item)
-        {
-            return;
-        }
-
-        //Confirm deletion with the user
+        MaterialItem item = e.Item;
         bool result = await DisplayAlertAsync("Confirm Deletion", $"Are you sure you want to delete {item.Title}?", "Yes", "No");
-        
+
         if (!result)
         {
             return;
         }
 
-        viewModel.Items.Remove(item);
+        viewModel.RemoveItem(item);
+    }
 
+    private void OnItemsChanged(object? sender, EventArgs e)
+    {
         // Notify the CollectionView manually.
         BOMCollectionView.ItemsSource = null;
         BOMCollectionView.ItemsSource = viewModel.Items;
