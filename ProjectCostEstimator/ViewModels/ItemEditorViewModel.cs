@@ -100,7 +100,7 @@ namespace ProjectCostEstimator.ViewModels
             }
         }
 
-        public string totalText = "Enter item details and tap Submit.";
+        private string totalText = "Enter item details and tap Submit.";
         public string TotalText
         {
             get { return totalText; }

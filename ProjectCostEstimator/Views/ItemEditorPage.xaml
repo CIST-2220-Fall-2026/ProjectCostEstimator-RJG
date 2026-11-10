@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:viewModels="x:clr-namespace:ProjectCostEstimator.ViewModels"
+             xmlns:viewModels="clr-namespace:ProjectCostEstimator.ViewModels"
              x:Class="ProjectCostEstimator.Views.ItemEditorPage"     
              x:DataType="viewModels:ItemEditorViewModel"
              Title="Item Editor">
@@ -25,7 +25,7 @@
                 <Button x:Name="SubmitButton" Text="Submit" Command="{Binding SubmitCommand}"/>
                 <Button x:Name="CancelButton" Text="Cancel" Command="{Binding CancelCommand}"/>                
             </HorizontalStackLayout>
-            <Label x:Name="TotalCostLabel" Text="{Binding TotalText, Mode=TwoWay}" />
+            <Label x:Name="TotalCostLabel" Text="{Binding TotalText, Mode=OneWay}" />
             <Label x:Name="ValidationLabel" Text="{Binding ValidationText}" />
         </VerticalStackLayout>
     </ScrollView>
