@@ -1,18 +1,16 @@
-﻿using ProjectCostEstimator.Models;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using ProjectCostEstimator.Models;
 using ProjectCostEstimator.Services;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 
 namespace ProjectCostEstimator.ViewModels
 {
-    public class BillOfMaterialsViewModel
+    public partial class BillOfMaterialsViewModel:ObservableObject
     {
         private readonly IBomService bomService;
         public ObservableCollection<MaterialItem> Items { get { return bomService.Items; } }
-
-        public ICommand AddCommand { get; }
-        public ICommand EditCommand { get; }
-        public ICommand DeleteCommand { get; }
 
         public event EventHandler? AddRequested;
         public event EventHandler<MaterialItemEventArgs>? EditRequested;
@@ -21,20 +19,30 @@ namespace ProjectCostEstimator.ViewModels
         public BillOfMaterialsViewModel(IBomService bomService)
         {
             this.bomService = bomService;
+        }
 
-            AddCommand = new Command(() => AddRequested?.Invoke(this, EventArgs.Empty));
-       
-            EditCommand = new Command<MaterialItem>(item =>
-            {
-                if (item is not null && Items.Contains(item))
-                    EditRequested?.Invoke(this, new MaterialItemEventArgs(item));
-            });
+        [RelayCommand]
+        private void Add()
+        {
+            AddRequested?.Invoke(this, EventArgs.Empty);
+        }
 
-            DeleteCommand = new Command<MaterialItem>(item =>
+        [RelayCommand]
+        private void Edit(MaterialItem item)
+        {
+            if (item is not null && Items.Contains(item))
             {
-                if (item is not null && Items.Contains(item))
-                    DeleteRequested?.Invoke(this, new MaterialItemEventArgs(item));
-            });
+                EditRequested?.Invoke(this, new MaterialItemEventArgs(item));
+            }
+        }
+
+        [RelayCommand]
+        private void Delete(MaterialItem item)
+        {
+            if (item is not null && Items.Contains(item))
+            {
+                DeleteRequested?.Invoke(this, new MaterialItemEventArgs(item));
+            }
         }
 
         public void AddItem(MaterialItem item)
