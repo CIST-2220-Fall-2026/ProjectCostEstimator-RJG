@@ -13,7 +13,7 @@ namespace ProjectCostEstimator.ViewModels
         public partial string Title { get; set; } = string.Empty;
 
         [ObservableProperty]
-        public partial string SourceURL { get; set; } = string.Empty;
+        public partial string SourceUrl { get; set; } = string.Empty;
 
         [ObservableProperty]
 
@@ -38,19 +38,20 @@ namespace ProjectCostEstimator.ViewModels
         public event EventHandler<ItemSubmittedEventArgs>? Submitted;
         public event EventHandler? CancelRequested;
 
-        public ItemEditorViewModel(MaterialItem? item = null)
-        {          
-            if (item == null)
-            {
+        public void LoadItem(MaterialItem? item)
+        {
+            if (item is null)
+            { 
                 return;
             }
+
             Title = item.Title;
-            SourceURL = item.SourceUrl;
+            SourceUrl = item.SourceUrl;
             Units = item.Units;
             CostPerUnitText = item.CostPerUnit.ToString();
             UnitsNeededText = item.UnitsNeeded.ToString();
         }
-      
+
         private bool CanSubmit()
         {
             return TryValidate(out _, out _, out _);
@@ -112,7 +113,7 @@ namespace ProjectCostEstimator.ViewModels
 
             MaterialItem item = new(
                 Title.Trim(), 
-                SourceURL.Trim(), 
+                SourceUrl.Trim(), 
                 Units.Trim(), 
                 cost,  
                 quantity);
