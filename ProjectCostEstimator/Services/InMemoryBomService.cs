@@ -5,29 +5,33 @@ namespace ProjectCostEstimator.Services
 {
     public class InMemoryBomService : IBomService
     {
-        public ObservableCollection<MaterialItem> Items { get; } = new()
-          {
-            new MaterialItem("Test1", "url1", "ea", 25.2m, 300m),
-            new MaterialItem("Test2", "url2", "ea", 45.2m, 1000m)
-          };
+        public ObservableCollection<MaterialItem> Items { get; } = new();
 
-        public void AddItem(MaterialItem item)
+        public Task LoadAsync()
+        {
+            return Task.CompletedTask;
+        }
+
+        public Task AddItemAsync(MaterialItem item)
         {
             Items.Add(item);
+            return Task.CompletedTask;
         }
 
-        public void ReplaceItem(MaterialItem original, MaterialItem replacement)
+        public Task ReplaceItemAsync(MaterialItem original, MaterialItem replacement)
         {
             int index = Items.IndexOf(original);
-            if (index < 0)
+            if (index >= 0)
             {
-                return;
+                Items[index] = replacement;
             }
-            Items[index] = replacement;
+            return Task.CompletedTask;
         }
-        public void RemoveItem(MaterialItem item)
+
+        public Task RemoveItemAsync(MaterialItem item)
         {
             Items.Remove(item);
+            return Task.CompletedTask;
         }
     }
 }

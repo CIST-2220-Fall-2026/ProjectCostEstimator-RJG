@@ -6,8 +6,9 @@ namespace ProjectCostEstimator.Services
     public interface IBomService
     {
         ObservableCollection<MaterialItem> Items { get; }
-        void AddItem(MaterialItem item);
-        void ReplaceItem(MaterialItem original, MaterialItem replacement);
-        void RemoveItem(MaterialItem item);
+        Task LoadAsync();
+        Task AddItemAsync(MaterialItem item);
+        Task ReplaceItemAsync(MaterialItem original, MaterialItem replacement);
+        Task RemoveItemAsync(MaterialItem item);
     }
 }

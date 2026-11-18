@@ -12,6 +12,12 @@
                Text="Bill of Materials"
                HorizontalOptions="Center" />
 
+        <Label
+        Grid.Row="1"
+        Text="{Binding ErrorText}"
+        TextColor="Red"
+        Padding="6,2" />
+
         <CollectionView Grid.Row="1"
                         x:Name="BOMCollectionView"
                         ItemsSource="{Binding Items}">
